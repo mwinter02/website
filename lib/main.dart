@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 void main() {
   runApp(const MyApp());
@@ -104,6 +105,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Display the SVG asset
+            SvgPicture.asset(
+              'assets/images/logo.svg',
+              width: 120,
+              height: 120,
+            ),
+            const SizedBox(height: 24),
             const Text('You have pushed the button this many times:'),
             Text(
               '$_counter',
