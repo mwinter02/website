@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -26,11 +26,27 @@
   <meta name="apple-mobile-web-app-title" content="website">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.svg"/>
+  <!-- Favicon: prefer SVG, fallback to PNG -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.png" type="image/png">
 
   <title>website</title>
   <link rel="manifest" href="manifest.json">
+  <script>
+    // If redirected from 404.html with ?p=/website/some/path, restore the original path
+    (function () {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('p');
+        if (p) {
+          var decoded = decodeURIComponent(p);
+          history.replaceState({}, '', decoded);
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
