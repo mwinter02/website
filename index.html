@@ -33,13 +33,30 @@
   <title>website</title>
   <link rel="manifest" href="manifest.json">
   <script>
-    // If redirected from 404.html with ?p=/website/some/path, restore the original path
+    // If redirected from 404.html with ?p=/website/some/path or ?redirect=/some/path,
+    // restore the original path (but protect against repeated redirection loops and huge URIs)
     (function () {
       try {
         var params = new URLSearchParams(window.location.search);
-        var p = params.get('p');
+        var p = params.get('p') || params.get('redirect');
         if (p) {
+          // Decode once; if multiple encodings were applied, avoid repeated redirection
           var decoded = decodeURIComponent(p);
+
+          // If decoded already contains 'index.html' or points to this page, skip to avoid loops
+          if (decoded.indexOf('index.html') !== -1 || decoded.length > 2000) {
+            return;
+          }
+
+          // Only use the path portion (remove origin if present)
+          try {
+            var u = new URL(decoded, window.location.origin);
+            decoded = u.pathname + u.search + u.hash;
+          } catch (e) {
+            // not a full URL; leave decoded as-is
+          }
+
+          // Replace browser URL without causing a reload so Flutter sees the intended path
           history.replaceState({}, '', decoded);
         }
       } catch (e) {

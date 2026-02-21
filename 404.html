@@ -6,13 +6,12 @@
   <meta name="robots" content="noindex">
   <script>
     // GitHub Pages serves this 404 for unknown paths. Redirect to index.html
-    // and pass the original path in the `p` query param so index.html can
-    // restore the path before Flutter boots.
+    // and pass the original path in the `redirect` query param so index.html can
+    // restore the original path before Flutter boots.
     (function () {
       var path = location.pathname + location.search + location.hash;
-      // Update this repoBase if your project path changes
-      var repoBase = '/website';
-      var redirect = repoBase + '/index.html?p=' + encodeURIComponent(path);
+      // Redirect to the site root index.html; this works for user pages hosted at the root
+      var redirect = '/index.html?redirect=' + encodeURIComponent(path);
       location.replace(redirect);
     })();
   </script>
@@ -21,4 +20,3 @@
   Redirecting...
 </body>
 </html>
-
