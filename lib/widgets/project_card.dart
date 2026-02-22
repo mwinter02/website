@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../main.dart';
 import '../router.dart';
+import 'dynamic_widget.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ProjectCard
@@ -37,55 +41,57 @@ class _ProjectCardState extends State<ProjectCard> {
   @override
   Widget build(BuildContext context) {
     const radius = BorderRadius.all(Radius.circular(10));
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovering = true),
-      onExit:  (_) => setState(() => _isHovering = false),
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => context.go(widget.route),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            boxShadow: [
-              BoxShadow(
-                color: _isHovering
-                    ? Colors.deepPurpleAccent.withValues(alpha: 0.45)
-                    : Colors.black.withValues(alpha: 0.35),
-                blurRadius: _isHovering ? 20 : 8,
-                spreadRadius: _isHovering ? 2 : 0,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          // Slight lift on hover via transform
-          transform: _isHovering
-              ? (Matrix4.identity()..translateByDouble(0.0, -4.0, 0.0, 1.0))
-              : Matrix4.identity(),
-          child: ClipRRect(
-            borderRadius: radius,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // ── Banner image ──────────────────────────────────────────
-                Image.asset(
-                  widget.imagePath,
-                  fit: BoxFit.cover,
-                ),
-                // ── Hover overlay ─────────────────────────────────────────
-                AnimatedOpacity(
-                  opacity: _isHovering ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.ease,
-                  child: _HoverOverlay(
-                    title: widget.title,
-                    description: widget.description,
-                    tags: widget.tags,
-                  ),
+    return ValueListenableBuilder(
+      valueListenable: isMobileNotifier,
+      builder: (context, isTrue, child) => MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit:  (_) => setState(() => _isHovering = false),
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => context.go(widget.route),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              borderRadius: radius,
+              boxShadow: [
+                BoxShadow(
+                  color: _isHovering
+                      ? Colors.deepPurpleAccent.withValues(alpha: 0.45)
+                      : Colors.black.withValues(alpha: 0.35),
+                  blurRadius: _isHovering ? 20 : 8,
+                  spreadRadius: _isHovering ? 2 : 0,
+                  offset: const Offset(0, 4),
                 ),
               ],
+            ),
+            // Slight lift on hover via transform
+            transform: _isHovering
+                ? (Matrix4.identity()..translateByDouble(0.0, -4.0, 0.0, 1.0))
+                : Matrix4.identity(),
+            child: ClipRRect(
+              borderRadius: radius,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  // ── Banner image ──────────────────────────────────────────
+                  Image.asset(
+                    widget.imagePath,
+                    fit: BoxFit.cover,
+                  ),
+                  // ── Hover overlay ─────────────────────────────────────────
+                  AnimatedOpacity(
+                    opacity: _isHovering || isTrue ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.ease,
+                    child: _HoverOverlay(
+                      title: widget.title,
+                      description: widget.description,
+                      tags: widget.tags,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

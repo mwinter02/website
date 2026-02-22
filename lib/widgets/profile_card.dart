@@ -688,9 +688,9 @@ class _TrainerCardBack extends StatelessWidget {
       'translating complex technical problems into clean, maintainable code.\n\n';
 
   static const List<_StatItem> _stats = [
-    _StatItem(label: 'YEARS CODING', value: '8+'),
-    _StatItem(label: 'PROJECTS SHIPPED', value: '20+'),
-    _StatItem(label: 'CUPS OF COFFEE', value: '∞'),
+    // _StatItem(label: 'YEARS CODING', value: '8+'),
+    // _StatItem(label: 'PROJECTS SHIPPED', value: '20+'),
+    // _StatItem(label: 'CUPS OF COFFEE', value: '∞'),
   ];
 
   const _TrainerCardBack({
@@ -762,14 +762,14 @@ class _TrainerCardBack extends StatelessWidget {
             ),
           ),
         ),
-        const _CardDivider(label: 'AT A GLANCE'),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: _stats.map((s) => _StatBadge(item: s)).toList(),
-          ),
-        ),
+        // const _CardDivider(label: 'AT A GLANCE'),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //     children: _stats.map((s) => _StatBadge(item: s)).toList(),
+        //   ),
+        // ),
       ],
     );
   }
@@ -1200,6 +1200,7 @@ class LanguageBadge extends StatefulWidget {
 
 class _LanguageBadgeState extends State<LanguageBadge> {
   bool _hovered = false;
+  bool _mobile = false;
 
   @override
   Widget build(BuildContext context) {
