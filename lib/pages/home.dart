@@ -1,7 +1,6 @@
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme.dart';
 import '../widgets/dynamic_widget.dart';
-import '../router.dart';
 import '../widgets/profile_card.dart';
 import '../widgets/project_card.dart';
 import '../widgets/site_widgets.dart';
@@ -116,7 +115,7 @@ class _ProjectsSection extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _SectionHeader — watermark title + filter bar on one line
+// _SectionHeader — responsive: inline on wide screens, stacked on narrow
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _SectionHeader extends StatelessWidget {
@@ -132,66 +131,114 @@ class _SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final wide = constraints.maxWidth >= 900;
+      return wide
+          ? _wideLayout(context)
+          : _narrowLayout(context);
+    });
+  }
+
+  // Wide: title + divider on the left, wrapping chips fill the right.
+  Widget _wideLayout(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Oversized watermark label — low opacity so it reads as atmosphere
-        ShaderMask(
-          shaderCallback: (bounds) => const LinearGradient(
-            colors: [Colors.white, Colors.white54],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ).createShader(bounds),
-          child: Text(
-            'PROJECTS',
-            style: GoogleFonts.michroma(
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-              color: Colors.white, // shader overrides this
-              letterSpacing: 6,
-            ),
-          ),
+        // Left: title + rule pinned to the top of the row.
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _title(42),
+            const SizedBox(height: 6),
+            _verticalRule(),
+          ],
         ),
         const SizedBox(width: 24),
-        // Vertical rule separating title from filter chips
-        Container(
-          width: 1.5,
-          height: 32,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.transparent,
-                ThemeColors.appBarAccent.withValues(alpha: 0.8),
-                Colors.transparent,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-        ),
-        const SizedBox(width: 24),
+        // Right: chips wrap freely — never overflow.
         Expanded(
-          child: _FilterBar(
-            tags: allTags,
-            activeTag: activeTag,
-            onTagSelected: onTagSelected,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: _FilterChips(
+              tags: allTags,
+              activeTag: activeTag,
+              onTagSelected: onTagSelected,
+            ),
           ),
         ),
       ],
     );
   }
+
+  // Narrow: title on its own line, chips wrap below.
+  Widget _narrowLayout(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _title(28),
+        const SizedBox(height: 14),
+        _FilterChips(
+          tags: allTags,
+          activeTag: activeTag,
+          onTagSelected: onTagSelected,
+        ),
+      ],
+    );
+  }
+
+  Widget _title(double fontSize) {
+    return ShaderMask(
+      shaderCallback: (bounds) => const LinearGradient(
+        colors: [Colors.white, Colors.white54],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(bounds),
+      child: Text(
+        'PROJECTS',
+        style: GoogleFonts.michroma(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+          letterSpacing: 6,
+        ),
+      ),
+    );
+  }
+
+  Widget _verticalRule() {
+    return Container(
+      width: 1.5,
+      height: 32,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.transparent,
+            ThemeColors.appBarAccent.withValues(alpha: 0.8),
+            Colors.transparent,
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+    );
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _FilterBar
+// _FilterChips
+//
+// wrap: false → Row (wide layout, chips stay on one line)
+// wrap: true  → Wrap (narrow layout, chips flow onto multiple lines)
+//
+// No horizontal scrolling in either mode, eliminating the Safari swipe-back
+// conflict on mobile.
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _FilterBar extends StatelessWidget {
+class _FilterChips extends StatelessWidget {
   final List<String> tags;
   final String? activeTag;
   final ValueChanged<String?> onTagSelected;
 
-  const _FilterBar({
+  const _FilterChips({
     required this.tags,
     required this.activeTag,
     required this.onTagSelected,
@@ -199,31 +246,23 @@ class _FilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          // "All" pill
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: TagChip(
-              label: 'ALL',
-              active: activeTag == null,
-              onTap: () => onTagSelected(null),
-            ),
-          ),
-          ...tags.map(
-            (t) => Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: TagChip(
-                label: t.toUpperCase(),
-                active: activeTag == t,
-                onTap: () => onTagSelected(activeTag == t ? null : t),
-              ),
-            ),
-          ),
-        ],
+    final chips = [
+      TagChip(
+        label: 'ALL',
+        active: activeTag == null,
+        onTap: () => onTagSelected(null),
       ),
+      ...tags.map((t) => TagChip(
+            label: t.toUpperCase(),
+            active: activeTag == t,
+            onTap: () => onTagSelected(activeTag == t ? null : t),
+          )),
+    ];
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: chips,
     );
   }
 }

@@ -215,7 +215,7 @@ class TagChip extends StatelessWidget {
       );
 }
 
-class _TagChip extends StatelessWidget {
+class _TagChip extends StatefulWidget {
   final String label;
   final bool active;
   final VoidCallback? onTap;
@@ -223,31 +223,63 @@ class _TagChip extends StatelessWidget {
   const _TagChip({required this.label, this.active = false, this.onTap});
 
   @override
+  State<_TagChip> createState() => _TagChipState();
+}
+
+class _TagChipState extends State<_TagChip> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
-          color: active
-              ? Colors.deepPurpleAccent.withValues(alpha: 0.35)
-              : Colors.white.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(4),
-          border: Border.all(
+    final active = widget.active;
+    final hovered = _hovered && !active;
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit:  (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 160),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
             color: active
-                ? Colors.deepPurpleAccent
-                : Colors.white.withValues(alpha: 0.25),
-            width: 1,
+                ? Colors.deepPurpleAccent.withValues(alpha: 0.35)
+                : hovered
+                    ? Colors.white.withValues(alpha: 0.15)
+                    : Colors.white.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: active
+                  ? Colors.deepPurpleAccent
+                  : hovered
+                      ? Colors.white.withValues(alpha: 0.5)
+                      : Colors.white.withValues(alpha: 0.2),
+              width: 1,
+            ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.35),
+                      blurRadius: 8,
+                      spreadRadius: 0,
+                    ),
+                  ]
+                : [],
           ),
-        ),
-        child: Text(
-          label,
-          style: GoogleFonts.electrolize(
-            fontSize: 11,
-            letterSpacing: 1.2,
-            color: active ? Colors.white : Colors.white60,
-            fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+          child: Text(
+            widget.label,
+            style: GoogleFonts.electrolize(
+              fontSize: 11,
+              letterSpacing: 1.2,
+              color: active
+                  ? Colors.white
+                  : hovered
+                      ? Colors.white.withValues(alpha: 0.85)
+                      : Colors.white60,
+              fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+            ),
           ),
         ),
       ),
