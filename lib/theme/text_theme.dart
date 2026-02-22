@@ -9,25 +9,25 @@ class AppTextTheme {
   static final TextStyle display = GoogleFonts.michroma(
     fontSize: 48,
     fontWeight: FontWeight.bold,
-    color: Colors.black,
+    color: Colors.white,
   );
 
   static final TextStyle headline = GoogleFonts.michroma(
     fontSize: 32,
     fontWeight: FontWeight.bold,
-    color: Colors.black,
+    color: Colors.white,
   );
 
   static final TextStyle title = GoogleFonts.electrolize(
     fontSize: 24,
     fontWeight: FontWeight.w500,
-    color: Colors.black87,
+    color: Colors.white,
   );
   
   static final TextStyle body = GoogleFonts.montserrat(
     fontSize: 16,
     fontWeight: FontWeight.normal,
-    color: Colors.black54,
+    color: Colors.white,
   );
   
   

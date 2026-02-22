@@ -160,9 +160,14 @@ efficiently without rebuilding expensive structures every frame.
 I also added frustum culling to optimize rendering. Each object's bounding box gets tested against the view frustum. If
 any corner is inside the frustum, the object gets rendered; otherwise it's culled, which cuts down on draw calls.
 
-The performance improvement was massive. I did a stress test with 100 colliding spheres exploding outwards—something
-that was completely unplayable before—and it now runs at perfect frame rates with no drops. This proved that combining
-BVH for static stuff with hierarchical grids for dynamic objects really works.
+The performance improvement was massive. I did a stress test with 100 static floor tiles and 2500 dynamic colliding
+spheres exploding outwards and it now runs at perfect frame rates with no drops. This proved that combining
+BVH for static objects with hierarchical grids for dynamic objects really works.
+
+> #### 2500 tightly packed spheres with stable 100+ fps
+>
+> ![explode.gif](/assets/images/projects/pngchaser/explode.gif)
+>
 
 Debugging hierarchical grids in 3D was surprisingly hard. 1D and 2D examples made sense, but extending it to three
 dimensions with multiple resolution levels took a lot of spatial reasoning. Figuring out which objects belonged in which
@@ -198,11 +203,11 @@ queries the pathfinding component, runs A* and the funnel algorithm, then update
 This separation means multiple AI entities can share the same navigation mesh while keeping their own paths and
 behaviors.
 
-<!-- Image: AI pathfinding in action -->
 
 Getting pathfinding to work with the data-oriented ECS took some careful thinking. Paths vary in length and need
 frequent updates, so finding a cache-friendly way to represent them that still fit the structure-of-arrays approach
 needed some creative solutions.
+
 
 ### Project 5: Final Project
 
@@ -214,7 +219,10 @@ layouts. I paired this with a modular asset system—walls, floors, and ceilings
 just providing a few core assets, the system automatically builds a complete backrooms-themed maze. Each playthrough
 generates a completely different layout that captures that liminal, unsettling backrooms vibe.
 
-<!-- Image: Procedurally generated maze -->
+> #### Chaser approaching player
+>
+>![chaser_lurking.png](/assets/images/projects/pngchaser/chaser_lurking.png)
+>
 
 The audio system uses RAudio for immersive 3D sound. Stereo panning shifts audio between left and right channels based
 on where the chaser is relative to you. Volume drops with distance, which builds tension as the chaser gets closer.

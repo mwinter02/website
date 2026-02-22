@@ -10,7 +10,7 @@ final AppBarTheme appBarTheme = AppBarTheme(
 );
 
 ThemeData appTheme = ThemeData(
-  primarySwatch: Colors.blue,
+  primarySwatch: Colors.deepPurple,
   appBarTheme: appBarTheme,
   textTheme: AppTextTheme.theme,
   // Charcoal: very slightly blue-tinted near-black — pairs with deep purple

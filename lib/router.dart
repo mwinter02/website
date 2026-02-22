@@ -6,6 +6,7 @@ import 'package:website/pages/projects.dart';
 import 'package:website/pages/projects/collider.dart';
 import 'package:website/pages/projects/pngchaser.dart';
 import 'package:website/pages/projects/zombies.dart';
+import 'package:website/pages/under_construction.dart';
 
 export 'package:go_router/go_router.dart';
 
@@ -18,6 +19,8 @@ class RouteNames {
   static const String zombies = '$projects/zombies';
   static const String pngchaser = '$projects/pngchaser';
   static const String collider = '$projects/collider';
+  static const String airobic = '$projects/airobic';
+  static const String terrain = '$projects/terrain';
 }
 
 class Routes {
@@ -38,6 +41,18 @@ class Routes {
     builder: (BuildContext context, GoRouterState state) => const ColliderPage(),
   );
 
+  static GoRoute airobic = GoRoute(
+    path: RouteNames.airobic,
+    builder: (BuildContext context, GoRouterState state) => const UnderConstruction(),
+  );
+
+  static GoRoute terrain = GoRoute(
+    path: RouteNames.terrain,
+    builder: (BuildContext context, GoRouterState state) => const UnderConstruction(),
+  );
+
+
+
   static GoRoute projects = GoRoute(
     path: RouteNames.projects,
     builder: (BuildContext context, GoRouterState state) => const ProjectsPage(),
@@ -46,7 +61,7 @@ class Routes {
   static GoRoute home = GoRoute(
     path: RouteNames.home,
     builder: (BuildContext context, GoRouterState state) => const MyHomePage(),
-    routes: <RouteBase>[projects, zombies, pngchaser, collider],
+    routes: <RouteBase>[projects, zombies, pngchaser, collider, airobic, terrain],
   );
 }
 

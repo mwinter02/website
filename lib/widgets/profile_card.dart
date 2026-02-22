@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:website/widgets/dynamic_widget.dart';
+import 'dart:math' show pi;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data model for a language badge
@@ -43,7 +45,7 @@ const List<LanguageBadgeData> _defaultBadges = [
 // ProfileCard  (root widget – replace or extend as needed)
 // ─────────────────────────────────────────────────────────────────────────────
 
-class ProfileCard extends StatelessWidget {
+class ProfileCard extends DynamicWidget {
   final String name;
   final String title;
   final String education;
@@ -65,27 +67,26 @@ class ProfileCard extends StatelessWidget {
     this.profileImage = const AssetImage('assets/images/profile_picture.png'),
   });
 
-  /// The fixed width:height ratio of the card.
-  /// Tweak this constant if you want the card taller or shorter.
-  static const double _aspectRatio = 16 / 7;
+  // ── Desktop ──────────────────────────────────────────────────────────────
+
+  /// The fixed width:height ratio of the desktop card.
+  static const double _desktopAspectRatio = 16 / 7;
 
   @override
-  Widget build(BuildContext context) {
+  Widget desktopView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
       child: ConstrainedBox(
-        // Never wider than the design width, never narrower than 320 px.
         constraints: const BoxConstraints(maxWidth: 860, minWidth: 320),
         child: AspectRatio(
-          aspectRatio: _aspectRatio,
+          aspectRatio: _desktopAspectRatio,
           child: FittedBox(
             fit: BoxFit.contain,
             alignment: Alignment.topCenter,
             child: SizedBox(
-              // Give FittedBox a concrete reference size to scale from.
               width: 860,
-              height: 860 / _aspectRatio,
-              child: _TrainerCard(
+              height: 860 / _desktopAspectRatio,
+              child: _FlippableCard(
                 name: name,
                 title: title,
                 education: education,
@@ -95,6 +96,262 @@ class ProfileCard extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  // ── Mobile ───────────────────────────────────────────────────────────────
+
+  @override
+  Widget mobileView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      child: _MobileCard(
+        name: name,
+        title: title,
+        education: education,
+        interests: interests,
+        badges: badges,
+        profileImage: profileImage,
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _MobileCard  –  vertical single-column layout for narrow screens
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _MobileCard extends StatelessWidget {
+  final String name;
+  final String title;
+  final String education;
+  final List<String> interests;
+  final List<LanguageBadgeData> badges;
+  final ImageProvider profileImage;
+
+  const _MobileCard({
+    required this.name,
+    required this.title,
+    required this.education,
+    required this.interests,
+    required this.badges,
+    required this.profileImage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFF1A0533), Color(0xFF311B92)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.deepPurple.withValues(alpha: 0.55),
+            blurRadius: 32,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 28),
+          // ── Avatar centred at the top ──────────────────────────────────
+          Center(child: _ProfileAvatar(image: profileImage)),
+          const SizedBox(height: 20),
+          // ── Name + title chip ──────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  name,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.michroma(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1.4,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.electrolize(
+                      fontSize: 12,
+                      color: Colors.deepPurpleAccent.shade100,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // ── Detail rows ───────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                _DetailRow(icon: Icons.school_outlined, text: education),
+                const SizedBox(height: 8),
+                _DetailRow(
+                  icon: Icons.interests_outlined,
+                  text: interests.join(' · '),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          // ── Badge grid — wraps onto multiple rows ─────────────────────
+          _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
+          _MobileBadgeGrid(badges: badges),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _MobileBadgeGrid  –  wrapping Wrap instead of a horizontal scroll row
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _MobileBadgeGrid extends StatelessWidget {
+  final List<LanguageBadgeData> badges;
+
+  const _MobileBadgeGrid({required this.badges});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Wrap(
+        spacing: 12,
+        runSpacing: 12,
+        alignment: WrapAlignment.center,
+        children: badges.map((b) => LanguageBadge(data: b)).toList(),
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _FlippableCard  –  owns the AnimationController and decides which face to show
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _FlippableCard extends StatefulWidget {
+  final String name;
+  final String title;
+  final String education;
+  final List<String> interests;
+  final List<LanguageBadgeData> badges;
+  final ImageProvider profileImage;
+
+  const _FlippableCard({
+    required this.name,
+    required this.title,
+    required this.education,
+    required this.interests,
+    required this.badges,
+    required this.profileImage,
+  });
+
+  @override
+  State<_FlippableCard> createState() => _FlippableCardState();
+}
+
+class _FlippableCardState extends State<_FlippableCard>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _angle; // 0 → pi
+
+  bool get _showingBack => _ctrl.value >= 0.5;
+
+  void _flip() {
+    if (_showingBack) {
+      _ctrl.reverse();
+    } else {
+      _ctrl.forward();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 550),
+    );
+    _angle = Tween<double>(begin: 0, end: pi).animate(
+      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: _flip,
+        child: AnimatedBuilder(
+          animation: _angle,
+          builder: (context, _) {
+            // When past 90° we start rendering the back face.
+            final showBack = _ctrl.value >= 0.5;
+
+            // The back face needs a counter-rotation so it isn't mirrored.
+            final faceAngle = showBack ? _angle.value - pi : _angle.value;
+
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateX(faceAngle), // Flip around X axis
+                // ..setEntry(3, 2, 0.001) //  Flip around Y axis
+                // ..rotateY(faceAngle),
+              child: showBack
+                  ? _TrainerCardBack(
+                      name: widget.name,
+                      title: widget.title,
+                    )
+                  : _TrainerCard(
+                      name: widget.name,
+                      title: widget.title,
+                      education: widget.education,
+                      interests: widget.interests,
+                      badges: widget.badges,
+                      profileImage: widget.profileImage,
+                    ),
+            );
+          },
         ),
       ),
     );
@@ -167,7 +424,190 @@ class _TrainerCard extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _CardHeader  (name, photo, details)
+// _TrainerCardBack  –  the reverse side shown after the flip
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _TrainerCardBack extends StatelessWidget {
+  final String name;
+  final String title;
+
+  // Bio copy — pass as a parameter once you want to externalise it.
+  static const String _bio =
+      "I'm a software engineer with a passion for building things that sit at "
+      "the intersection of performance and creativity — from physics simulations "
+      "and real-time graphics to full-stack web tools.\n\n"
+      "My background spans game engine architecture, GPU shader programming, and "
+      "modern web development with Flutter & Dart. I enjoy the challenge of "
+      "translating complex technical problems into clean, maintainable code.\n\n"
+      "Outside of work I spend my time tinkering with procedural generation, "
+      "competitive programming, and the occasional tabletop RPG campaign.";
+
+  static const List<_StatItem> _stats = [
+    _StatItem(label: 'YEARS CODING', value: '8+'),
+    _StatItem(label: 'PROJECTS SHIPPED', value: '20+'),
+    _StatItem(label: 'CUPS OF COFFEE', value: '∞'),
+  ];
+
+  const _TrainerCardBack({required this.name, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        // Inverted gradient direction for a subtle "other side" feel.
+        gradient: const LinearGradient(
+          colors: [Color(0xFF311B92), Color(0xFF1A0533)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.deepPurple.withValues(alpha: 0.55),
+            blurRadius: 32,
+            spreadRadius: 2,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Header strip ────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 22, 28, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  name,
+                  style: GoogleFonts.michroma(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 1.4,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  child: Text(
+                    title,
+                    style: GoogleFonts.electrolize(
+                      fontSize: 11,
+                      color: Colors.deepPurpleAccent.shade100,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                // Subtle "tap to flip back" hint
+                Row(
+                  children: [
+                    Icon(Icons.touch_app_outlined,
+                        size: 13, color: Colors.white24),
+                    const SizedBox(width: 4),
+                    Text(
+                      'TAP TO FLIP',
+                      style: GoogleFonts.electrolize(
+                        fontSize: 10,
+                        color: Colors.white24,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // ── Divider ─────────────────────────────────────────────────────
+          const SizedBox(height: 10),
+          _CardDivider(label: 'BIO'),
+          // ── Bio text ────────────────────────────────────────────────────
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(28, 14, 28, 0),
+              child: Text(
+                _bio,
+                style: GoogleFonts.montserrat(
+                  fontSize: 12.5,
+                  color: Colors.white70,
+                  height: 1.65,
+                ),
+              ),
+            ),
+          ),
+          // ── Stats row ───────────────────────────────────────────────────
+          _CardDivider(label: 'AT A GLANCE'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _stats
+                  .map((s) => _StatBadge(item: s))
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _StatItem / _StatBadge  –  small "at a glance" numbers on the back face
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _StatItem {
+  final String label;
+  final String value;
+  const _StatItem({required this.label, required this.value});
+}
+
+class _StatBadge extends StatelessWidget {
+  final _StatItem item;
+  const _StatBadge({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          item.value,
+          style: GoogleFonts.michroma(
+            fontSize: 22,
+            color: Colors.deepPurpleAccent.shade100,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          item.label,
+          style: GoogleFonts.electrolize(
+            fontSize: 10,
+            color: Colors.white38,
+            letterSpacing: 1.8,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _TrainerCard  (name, photo, details)
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _CardHeader extends StatelessWidget {
@@ -511,4 +951,6 @@ class _LanguageBadgeState extends State<LanguageBadge> {
     );
   }
 }
+
+
 

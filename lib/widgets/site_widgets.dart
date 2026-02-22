@@ -10,24 +10,39 @@ import '../theme/text_theme.dart';
 AppBar siteAppBar(BuildContext context) {
   return AppBar(
     toolbarHeight: 80,
-    // Paint the gradient + accent rule as the bar's own background.
     flexibleSpace: _AppBarBackground(),
-    title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        TextButton(
-          child: Text('mwinter02', style: AppTextTheme.display.copyWith(
-            color: Colors.white,
-          )),
-          onPressed: () => context.go(RouteNames.home),
-        ),
-        Row(
-          children: [
-            _linkedInButton(context),
-            _emailButton(context),
-          ],
-        ),
-      ],
+    // titleSpacing: 0 lets our own padding fully control the layout.
+    titleSpacing: 0,
+    title: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Logo — FittedBox shrinks the text when the bar gets narrow
+          // instead of overflowing.
+          Flexible(
+            child: TextButton(
+              onPressed: () => context.go(RouteNames.home),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'mwinter02',
+                  style: AppTextTheme.display.copyWith(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+          // Icon buttons — fixed size, never shrink.
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _linkedInButton(context),
+              _emailButton(context),
+            ],
+          ),
+        ],
+      ),
     ),
     automaticallyImplyLeading: false,
   );
@@ -77,21 +92,82 @@ class _AppBarBackground extends StatelessWidget {
 // Icon buttons
 // ─────────────────────────────────────────────────────────────────────────────
 
-Widget _emailButton(BuildContext context) {
-  return IconButton(
-    iconSize: 48,
-    hoverColor: Colors.transparent,
-    onPressed: () => launchUrl(emailLaunchUri),
-    icon: const Icon(Icons.email_outlined, color: Colors.white),
-  );
+Widget _emailButton(BuildContext context) => _GlowIconButton(
+      icon: Icons.email_outlined,
+      iconSize: 40,
+      glowColor: const Color(0xFFFF39F5),
+      onPressed: () => launchUrl(emailLaunchUri),
+    );
+
+Widget _linkedInButton(BuildContext context) => _GlowIconButton(
+      icon: FontAwesomeIcons.squareLinkedin,
+      iconSize: 36,
+      glowColor: const Color(0xFF0E7AE3), // LinkedIn blue
+      onPressed: () => launchUrl(linkedInLaunchUri),
+    );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _GlowIconButton — reusable hover-glow button.
+// Swap glowColor per instance to give each icon its own branded glow.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _GlowIconButton extends StatefulWidget {
+  final IconData icon;
+  final double iconSize;
+  final Color glowColor;
+  final VoidCallback onPressed;
+
+  const _GlowIconButton({
+    required this.icon,
+    required this.iconSize,
+    required this.glowColor,
+    required this.onPressed,
+  });
+
+  @override
+  State<_GlowIconButton> createState() => _GlowIconButtonState();
 }
 
-Widget _linkedInButton(BuildContext context) {
-  return IconButton(
-    iconSize: 40,
-    hoverColor: Colors.transparent,
-    onHover: (hovering) => (),
-    onPressed: () => launchUrl(linkedInLaunchUri),
-    icon: const Icon(FontAwesomeIcons.squareLinkedin, color: Colors.white),
-  );
+class _GlowIconButtonState extends State<_GlowIconButton> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit:  (_) => setState(() => _hovered = false),
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: _hovered
+                  ? [
+                      BoxShadow(
+                        color: widget.glowColor.withValues(alpha: 0.65),
+                        blurRadius: 18,
+                        spreadRadius: 2,
+                      ),
+                    ]
+                  : [],
+            ),
+            child: AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
+              style: const TextStyle(), // required but unused
+              child: Icon(
+                widget.icon,
+                size: widget.iconSize,
+                color: _hovered ? widget.glowColor : Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
