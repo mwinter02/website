@@ -1,84 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:website/router.dart';
-
-import '../../widgets/video_player.dart';
-import '../page_view.dart';
-
-class PngChaserPage extends StatelessWidget {
-  const PngChaserPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ProjectPageView(
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: MarkdownBody(
-              data: mdTitle,
-
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SimpleWebVideoPlayer(videoPath: 'pngchaser_demo.mp4'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: MarkdownBody(
-              data: mdBody,
-                onTapLink: (text, href, title) async {
-                  if (href != null) {
-                    final Uri url = Uri.parse(href);
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                  }
-                }
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => context.go(RouteNames.home),
-                  child: Text('To home.'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.go(RouteNames.projects),
-                  child: Text('To projects.'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.go(RouteNames.pngchaser),
-                  child: Text('To PNG chaser.'),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  static const String mdTitle = """ 
-  # PNG Chaser
+# PNG Chaser
 
 ## Brief
 
 PNG Chaser is a 3D survival horror game heavily inspired by Garry's Mod's "nextbot chase" game mode. The game was built
 with a custom engine in C++ developed from scratch over the course of a 12-week semester, utilizing OpenGL for
 rendering.
-  """;
 
-  static const String mdBody =
-  """ 
+### Project Type: Solo
+
+### Skills: C++, Game Engine development, OpenGL, ECS Architecture, Data-Oriented Design, Collision Detection (GJK/EPA), Pathfinding, Spatial Acceleration Structures
+
+<!-- Video Here -->
+
 ## Overview
 
 PNG Chaser is a first-person survival horror game where you're trapped in a procedurally generated backrooms
@@ -319,6 +252,3 @@ This project really validated data-oriented design and modern C++ techniques for
 important it is to pick the right algorithms and optimize carefully. Every challenge I worked through—from those
 floating-point precision errors in collision detection to visualizing 3D hierarchical grids—helped me understand game
 engine architecture and real-time graphics programming way better.
-
-  """;
-}

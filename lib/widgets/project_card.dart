@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../router.dart';
 
 class ProjectCard extends StatefulWidget {
@@ -39,20 +38,25 @@ class _ProjectCardState extends State<ProjectCard> {
               height: double.infinity,
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: borderRadius,
-              color: _isHovering ? Colors.black26 : Colors.transparent,
-            ),
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                widget.title,
-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24
+          AnimatedOpacity(
+            opacity: _isHovering ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.ease,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                color: Colors.black26,
+              ),
+              alignment: Alignment.topLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.title,
+                  style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24
+                  ),
                 ),
               ),
             ),

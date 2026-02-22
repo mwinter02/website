@@ -1,7 +1,7 @@
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
+import 'package:website/theme/text_theme.dart';
 import 'package:website/widgets/dynamic_widget.dart';
 import 'package:website/router.dart';
+import 'package:website/widgets/profile_card.dart';
 import 'package:website/widgets/project_card.dart';
 import 'package:website/widgets/site_widgets.dart';
 
@@ -30,24 +30,17 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
   Widget desktopView(BuildContext context) {
     return Scaffold(
       appBar: siteAppBar(context),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Display the SVG asset
-            SvgPicture.asset('assets/images/logo.svg', width: 120, height: 120),
-            const SizedBox(height: 24),
-            const Text('You have pushed the button this many times:'),
-            ElevatedButton(
-              onPressed: () => context.go(RouteNames.projects),
-              child: const Text("To projects page"),
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            _projectsBanner(context),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Display the SVG asset
+              ProfileCard(),
+              _projectTile(context),
+              _projectsBanner(context),
+            ],
+          ),
         ),
       ),
     );
@@ -56,6 +49,25 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
   @override
   Widget mobileView(BuildContext context) {
     return desktopView(context);
+  }
+
+  Widget _projectTile(BuildContext context) {
+    return Container(
+      color: Colors.deepPurple,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'Projects',
+          style: AppTextTheme.display.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 32
+          ),
+        ),
+      ),
+    );
   }
 
 
@@ -78,8 +90,8 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
       child: GridView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 500,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
           childAspectRatio: 16 / 9,

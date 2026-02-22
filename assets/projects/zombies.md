@@ -2,8 +2,7 @@
 
 ## Brief
 Zombies is a 2D top-down zombie survival game built with a custom engine in Java. The engine was developed from scratch
-over the course of the semester as part of [CSCI1950n](https://cs.brown.edu/courses/info/csci1950-n/),
-culminating in a 4-week final project to build a game using the engine. 
+over the course of the semester, culminating in a 4-week final project to build a game. 
 
 ### Project Type: Solo
 ### Skills: Java, Game Engine development, Sprite creation, Pathfinding, AI, Physics

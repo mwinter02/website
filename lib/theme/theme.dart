@@ -8,7 +8,6 @@ final AppBarTheme appBarTheme = AppBarTheme(
   elevation: 0,
 );
 
-
 ThemeData appTheme = ThemeData(
   primarySwatch: Colors.blue,
   appBarTheme: appBarTheme,
@@ -16,3 +15,11 @@ ThemeData appTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
+
+class ThemeColors {
+  static const Color primary = Colors.deepPurple;
+  static const Color secondary = Colors.deepPurpleAccent;
+  static const Color background = Colors.white;
+  static const Color textPrimary = Colors.black87;
+  static const Color textSecondary = Colors.black54;
+}
