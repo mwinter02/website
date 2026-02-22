@@ -67,10 +67,17 @@ class ProfileCard extends DynamicWidget {
     this.profileImage = const AssetImage('assets/images/profile_picture.png'),
   });
 
-  // ── Desktop ──────────────────────────────────────────────────────────────
-
-  /// The fixed width:height ratio of the desktop card.
   static const double _desktopAspectRatio = 16 / 7;
+
+  // Shared inner card — _FlippableCard dispatches mobile/desktop internally.
+  _FlippableCard _flippableCard() => _FlippableCard(
+        name: name,
+        title: title,
+        education: education,
+        interests: interests,
+        badges: badges,
+        profileImage: profileImage,
+      );
 
   @override
   Widget desktopView(BuildContext context) {
@@ -86,14 +93,7 @@ class ProfileCard extends DynamicWidget {
             child: SizedBox(
               width: 860,
               height: 860 / _desktopAspectRatio,
-              child: _FlippableCard(
-                name: name,
-                title: title,
-                education: education,
-                interests: interests,
-                badges: badges,
-                profileImage: profileImage,
-              ),
+              child: _flippableCard(),
             ),
           ),
         ),
@@ -101,20 +101,11 @@ class ProfileCard extends DynamicWidget {
     );
   }
 
-  // ── Mobile ───────────────────────────────────────────────────────────────
-
   @override
   Widget mobileView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      child: _MobileCard(
-        name: name,
-        title: title,
-        education: education,
-        interests: interests,
-        badges: badges,
-        profileImage: profileImage,
-      ),
+      child: _flippableCard(),
     );
   }
 }
@@ -258,10 +249,11 @@ class _MobileBadgeGrid extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// _FlippableCard  –  owns the AnimationController and decides which face to show
+// _FlippableCard  –  owns the flip animation and dispatches mobile/desktop
+//                   faces via DynamicStatefulWidget.
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _FlippableCard extends StatefulWidget {
+class _FlippableCard extends DynamicStatefulWidget {
   final String name;
   final String title;
   final String education;
@@ -279,10 +271,10 @@ class _FlippableCard extends StatefulWidget {
   });
 
   @override
-  State<_FlippableCard> createState() => _FlippableCardState();
+  DynamicState<_FlippableCard> createState() => _FlippableCardState();
 }
 
-class _FlippableCardState extends State<_FlippableCard>
+class _FlippableCardState extends DynamicState<_FlippableCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   late final Animation<double> _angle; // 0 → pi
@@ -317,44 +309,150 @@ class _FlippableCardState extends State<_FlippableCard>
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final isMobile = width < kMobileBreakpoint;
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: _flip,
-        child: AnimatedBuilder(
-          animation: _angle,
-          builder: (context, _) {
-            // When past 90° we start rendering the back face.
-            final showBack = _ctrl.value >= 0.5;
+        child: isMobile
+            ? _buildMobileFlip(context)
+            : _buildDesktopFlip(context),
+      ),
+    );
+  }
 
-            // The back face needs a counter-rotation so it isn't mirrored.
-            final faceAngle = showBack ? _angle.value - pi : _angle.value;
+  // Desktop flip — unchanged, both faces are in a fixed-height FittedBox.
+  Widget _buildDesktopFlip(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _angle,
+      builder: (context, _) {
+        final showBack = _ctrl.value >= 0.5;
+        final faceAngle = showBack ? _angle.value - pi : _angle.value;
+        return Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateX(faceAngle),
+          child: showBack ? _backFace() : desktopView(context),
+        );
+      },
+    );
+  }
 
-            return Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..rotateX(faceAngle), // Flip around X axis
-                // ..setEntry(3, 2, 0.001) //  Flip around Y axis
-                // ..rotateY(faceAngle),
+  // Mobile flip — lock both faces to the same height by:
+  //   1. Measuring the front face height with a LayoutBuilder.
+  //   2. Caching it in _mobileCardHeight once known.
+  //   3. Wrapping both faces in a SizedBox of that height.
+  //   4. The back face bio scrolls inside the fixed height — no overflow.
+  double? _mobileCardHeight;
+
+  Widget _buildMobileFlip(BuildContext context) {
+    // Phase 1: front face is visible — measure its natural height.
+    if (_mobileCardHeight == null) {
+      return _MeasureWidget(
+        child: mobileView(context),
+        onMeasured: (size) {
+          // Schedule after the current frame to avoid setState mid-build.
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() => _mobileCardHeight = size.height);
+          });
+        },
+      );
+    }
+
+    // Phase 2: height is known — lock both faces to it.
+    final h = _mobileCardHeight!;
+    return SizedBox(
+      height: h,
+      child: AnimatedBuilder(
+        animation: _angle,
+        builder: (context, _) {
+          final showBack = _ctrl.value >= 0.5;
+          final faceAngle = showBack ? _angle.value - pi : _angle.value;
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)   // perspective for X-axis flip
+              ..rotateY(faceAngle),
+            child: SizedBox(
+              height: h,
               child: showBack
                   ? _TrainerCardBack(
                       name: widget.name,
                       title: widget.title,
+                      fixedHeight: h,
                     )
-                  : _TrainerCard(
-                      name: widget.name,
-                      title: widget.title,
-                      education: widget.education,
-                      interests: widget.interests,
-                      badges: widget.badges,
-                      profileImage: widget.profileImage,
-                    ),
-            );
-          },
-        ),
+                  : mobileView(context),
+            ),
+          );
+        },
       ),
     );
+  }
+
+  Widget _backFace() => _TrainerCardBack(
+        name: widget.name,
+        title: widget.title,
+      );
+
+  // ── DynamicState interface ────────────────────────────────────────────────
+
+  @override
+  Widget desktopView(BuildContext context) => _TrainerCard(
+        name: widget.name,
+        title: widget.title,
+        education: widget.education,
+        interests: widget.interests,
+        badges: widget.badges,
+        profileImage: widget.profileImage,
+      );
+
+  @override
+  Widget mobileView(BuildContext context) => _MobileCard(
+        name: widget.name,
+        title: widget.title,
+        education: widget.education,
+        interests: widget.interests,
+        badges: widget.badges,
+        profileImage: widget.profileImage,
+      );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// _MeasureWidget — renders a child invisibly to obtain its natural size,
+// then calls onMeasured once. Used to lock the mobile card height before
+// the flip animation begins.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _MeasureWidget extends StatefulWidget {
+  final Widget child;
+  final void Function(Size) onMeasured;
+
+  const _MeasureWidget({required this.child, required this.onMeasured});
+
+  @override
+  State<_MeasureWidget> createState() => _MeasureWidgetState();
+}
+
+class _MeasureWidgetState extends State<_MeasureWidget> {
+  final _key = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final box = _key.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null && box.hasSize) {
+        widget.onMeasured(box.size);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return KeyedSubtree(key: _key, child: widget.child);
   }
 }
 
@@ -430,8 +528,10 @@ class _TrainerCard extends StatelessWidget {
 class _TrainerCardBack extends StatelessWidget {
   final String name;
   final String title;
+  /// When provided (mobile flip), the card is locked to this height and the
+  /// bio becomes scrollable so it never overflows.
+  final double? fixedHeight;
 
-  // Bio copy — pass as a parameter once you want to externalise it.
   static const String _bio =
       "I'm a software engineer with a passion for building things that sit at "
       "the intersection of performance and creativity — from physics simulations "
@@ -443,56 +543,145 @@ class _TrainerCardBack extends StatelessWidget {
       "competitive programming, and the occasional tabletop RPG campaign.";
 
   static const List<_StatItem> _stats = [
-    _StatItem(label: 'YEARS CODING', value: '8+'),
+    _StatItem(label: 'YEARS CODING',     value: '8+'),
     _StatItem(label: 'PROJECTS SHIPPED', value: '20+'),
-    _StatItem(label: 'CUPS OF COFFEE', value: '∞'),
+    _StatItem(label: 'CUPS OF COFFEE',   value: '∞'),
   ];
 
-  const _TrainerCardBack({required this.name, required this.title});
+  const _TrainerCardBack({
+    required this.name,
+    required this.title,
+    this.fixedHeight,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        // Inverted gradient direction for a subtle "other side" feel.
-        gradient: const LinearGradient(
-          colors: [Color(0xFF311B92), Color(0xFF1A0533)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.deepPurple.withValues(alpha: 0.55),
-            blurRadius: 32,
-            spreadRadius: 2,
-            offset: const Offset(0, 8),
+    return LayoutBuilder(builder: (context, constraints) {
+      // Treat as height-bounded if either the parent gave a bounded height
+      // (desktop FittedBox) or a fixedHeight was passed explicitly (mobile).
+      final effectiveHeight = fixedHeight ??
+          (constraints.hasBoundedHeight ? constraints.maxHeight : null);
+      final bounded = effectiveHeight != null;
+
+      return Container(
+        height: effectiveHeight,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF311B92), Color(0xFF1A0533)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withValues(alpha: 0.55),
+              blurRadius: 32,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: bounded ? _boundedLayout() : _unboundedLayout(),
+      );
+    });
+  }
+
+  // ── Bounded layout (desktop + mobile-flip) ────────────────────────────────
+  // Expanded + SingleChildScrollView ensures the bio fills available space
+  // and scrolls if the content is taller than the locked height.
+
+  Widget _boundedLayout() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _header(),
+        const SizedBox(height: 10),
+        _CardDivider(label: 'BIO'),
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(28, 14, 28, 8),
+            child: Text(
+              _bio,
+              style: GoogleFonts.montserrat(
+                fontSize: 12.5,
+                color: Colors.white70,
+                height: 1.65,
+              ),
+            ),
+          ),
+        ),
+        _CardDivider(label: 'AT A GLANCE'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _stats.map((s) => _StatBadge(item: s)).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Unbounded layout — fallback, content determines height ────────────────
+
+  Widget _unboundedLayout() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _header(),
+        const SizedBox(height: 10),
+        _CardDivider(label: 'BIO'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+          child: Text(
+            _bio,
+            style: GoogleFonts.montserrat(
+              fontSize: 13,
+              color: Colors.white70,
+              height: 1.65,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        _CardDivider(label: 'AT A GLANCE'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _stats.map((s) => _StatBadge(item: s)).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ── Shared header ─────────────────────────────────────────────────────────
+
+  Widget _header() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // ── Header strip ────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 22, 28, 0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   name,
                   style: GoogleFonts.michroma(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 1.4,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(height: 6),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
@@ -511,53 +700,23 @@ class _TrainerCardBack extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Spacer(),
-                // Subtle "tap to flip back" hint
-                Row(
-                  children: [
-                    Icon(Icons.touch_app_outlined,
-                        size: 13, color: Colors.white24),
-                    const SizedBox(width: 4),
-                    Text(
-                      'TAP TO FLIP',
-                      style: GoogleFonts.electrolize(
-                        fontSize: 10,
-                        color: Colors.white24,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
-          // ── Divider ─────────────────────────────────────────────────────
-          const SizedBox(height: 10),
-          _CardDivider(label: 'BIO'),
-          // ── Bio text ────────────────────────────────────────────────────
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(28, 14, 28, 0),
-              child: Text(
-                _bio,
-                style: GoogleFonts.montserrat(
-                  fontSize: 12.5,
-                  color: Colors.white70,
-                  height: 1.65,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.touch_app_outlined, size: 13, color: Colors.white24),
+              const SizedBox(width: 4),
+              Text(
+                'TAP TO FLIP',
+                style: GoogleFonts.electrolize(
+                  fontSize: 10,
+                  color: Colors.white24,
+                  letterSpacing: 1.5,
                 ),
               ),
-            ),
-          ),
-          // ── Stats row ───────────────────────────────────────────────────
-          _CardDivider(label: 'AT A GLANCE'),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: _stats
-                  .map((s) => _StatBadge(item: s))
-                  .toList(),
-            ),
+            ],
           ),
         ],
       ),
@@ -951,6 +1110,8 @@ class _LanguageBadgeState extends State<LanguageBadge> {
     );
   }
 }
+
+
 
 
 
