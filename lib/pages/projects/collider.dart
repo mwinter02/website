@@ -1,19 +1,87 @@
-# Interactive Collider Design for 3D Meshes
+
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import '../page_view.dart';
+
+class ColliderPage extends StatelessWidget {
+
+  const ColliderPage({super.key});
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ProjectPageView(
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: MarkdownBody(
+              data: mdTitle,
+
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SimpleWebVideoPlayer(videoPath: 'collider_demo.mp4'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: MarkdownBody(
+                data: mdBody,
+                onTapLink: (text, href, title) async {
+                  if (href != null) {
+                    final Uri url = Uri.parse(href);
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  }
+                }
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => context.go(RouteNames.home),
+                  child: Text('To home.'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.go(RouteNames.projects),
+                  child: Text('To projects.'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.go(RouteNames.pngchaser),
+                  child: Text('To PNG chaser.'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+  static const String mdTitle = """
+  # Interactive Collider Design for 3D Meshes
 
 ## Brief
 
 Interactive Collider Design is a computational design system for creating collision meshes (colliders) for both static
 and skeletal 3D assets. The tool was developed as a team project over 6 weeks, providing an intuitive interface for
 decomposing meshes and rigging colliders to animated skeletons.
+  """;
 
-### Project Type: Team (Marcus Winter, Gordan Milovac, Patrick Ortiz)
-
-### My Contributions: Static mesh decomposition interface, skeletal mesh decomposition algorithm and interface, collider export system
-
-### Skills: C++, Mesh Processing, Skinned Meshes, Computational Geometry, Assimp, OpenGL, UI Development
-
-<!-- Video/Image Here -->
-
+  static const String mdBody =
+""" 
 ## Overview
 
 After working on collision detection for my custom game engine (PNG Chaser), I realized that creating collision meshes
@@ -62,7 +130,7 @@ to convex decomposition for cases where performance matters more than accuracy.
 The main challenge was getting CoACD integrated smoothly—making sure the parameters were intuitive and that the
 processing time didn't freeze the UI. For larger meshes, decomposition can take a while, so giving visual feedback
 during the process was important.
->
+
 
 ### Skeletal Mesh Decomposition Algorithm
 
@@ -146,3 +214,8 @@ Building on my experience with collision detection in PNG Chaser, this project g
 the content creation side—not just how collision works in an engine, but how you actually create the collision meshes in
 the first place. The combination of geometric algorithms, mesh processing, and practical tool design made this a really
 valuable learning experience.
+
+""";
+
+
+}

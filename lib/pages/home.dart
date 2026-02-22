@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:website/theme/text_theme.dart';
+import 'package:website/theme/theme.dart';
 import 'package:website/widgets/dynamic_widget.dart';
 import 'package:website/router.dart';
 import 'package:website/widgets/profile_card.dart';
@@ -53,8 +55,18 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
 
   Widget _projectTile(BuildContext context) {
     return Container(
-      color: Colors.deepPurple,
       width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [ThemeColors.appBarStart, ThemeColors.appBarEnd],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        border: Border(
+          top: BorderSide(color: ThemeColors.appBarAccent, width: 1.5),
+          bottom: BorderSide(color: ThemeColors.appBarAccent, width: 1.5),
+        ),
+      ),
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -63,7 +75,7 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
           style: AppTextTheme.display.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 32
+            fontSize: 32,
           ),
         ),
       ),
@@ -83,6 +95,11 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
         imagePath: 'assets/images/banners/pngchaser.png',
         title: 'PNG Chaser',
       ),
+      ProjectCard(
+        route: RouteNames.collider,
+        imagePath: 'assets/images/banners/collider.png',
+        title: 'Interactive Collider Design',
+      )
       // Add more project cards here as needed
     ];
     return Padding(

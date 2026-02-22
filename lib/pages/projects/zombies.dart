@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:website/pages/page_view.dart';
 import 'package:website/router.dart';
-import 'package:markdown/markdown.dart' as md;
-import 'package:website/widgets/video_player.dart';
 
 class ZombiesPage extends StatelessWidget {
   const ZombiesPage({super.key});
