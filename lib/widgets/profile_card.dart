@@ -161,41 +161,47 @@ class _MobileCard extends StatelessWidget {
     required this.profileImage,
   });
 
+  // The card is authored for this reference width. Below it everything scales.
+  static const double _referenceWidth = 360.0;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1A0533), Color(0xFF311B92)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.deepPurple.withValues(alpha: 0.55),
-            blurRadius: 32,
-            spreadRadius: 2,
-            offset: const Offset(0, 8),
+    return LayoutBuilder(builder: (context, constraints) {
+      // Scale factor: 1.0 at reference width, shrinks proportionally below it.
+      final s = (constraints.maxWidth / _referenceWidth).clamp(0.6, 1.2);
+
+      return Container(
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF1A0533), Color(0xFF311B92)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
-      ),
-      child: SingleChildScrollView(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+            width: 1.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.deepPurple.withValues(alpha: 0.55),
+              blurRadius: 32,
+              spreadRadius: 2,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 28),
-            // ── Avatar centred at the top ──────────────────────────────────
-            Center(child: _ProfileAvatar(image: profileImage)),
-            const SizedBox(height: 20),
-            // ── Name + title chip ──────────────────────────────────────────
+            SizedBox(height: 24 * s),
+            // ── Avatar ────────────────────────────────────────────────────
+            _ScaledProfileAvatar(image: profileImage, scale: s),
+            SizedBox(height: 16 * s),
+            // ── Name + title chip ─────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20 * s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -203,17 +209,17 @@ class _MobileCard extends StatelessWidget {
                     name,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.michroma(
-                      fontSize: 20,
+                      fontSize: 20 * s,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                       letterSpacing: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 6 * s),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 3,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10 * s,
+                      vertical: 3 * s,
                     ),
                     decoration: BoxDecoration(
                       color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
@@ -225,7 +231,7 @@ class _MobileCard extends StatelessWidget {
                     child: Text(
                       title,
                       style: GoogleFonts.electrolize(
-                        fontSize: 12,
+                        fontSize: 12 * s,
                         color: Colors.deepPurpleAccent.shade100,
                         letterSpacing: 1.2,
                       ),
@@ -234,29 +240,107 @@ class _MobileCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 14 * s),
             // ── Detail rows ───────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20 * s),
               child: Column(
                 children: [
-                  _DetailRow(icon: Icons.school_outlined, text: education),
-                  const SizedBox(height: 8),
-                  _DetailRow(
+                  _ScaledDetailRow(
+                    icon: Icons.school_outlined,
+                    text: education,
+                    scale: s,
+                  ),
+                  SizedBox(height: 6 * s),
+                  _ScaledDetailRow(
                     icon: Icons.interests_outlined,
                     text: interests.join(' · '),
+                    scale: s,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            // ── Badge grid — wraps onto multiple rows ─────────────────────
+            SizedBox(height: 16 * s),
+            // ── Badge grid ────────────────────────────────────────────────
             const _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
-            _MobileBadgeGrid(badges: badges),
-            const SizedBox(height: 20),
+            _MobileBadgeGrid(badges: badges, scale: s),
+            SizedBox(height: 16 * s),
           ],
         ),
+      );
+    });
+  }
+}
+
+// Scaled avatar — radius driven by scale factor.
+class _ScaledProfileAvatar extends StatelessWidget {
+  final ImageProvider image;
+  final double scale;
+
+  const _ScaledProfileAvatar({required this.image, required this.scale});
+
+  @override
+  Widget build(BuildContext context) {
+    final radius = 54.0 * scale;
+    return Container(
+      padding: EdgeInsets.all(3 * scale),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: const SweepGradient(
+          colors: [
+            Colors.deepPurpleAccent,
+            Colors.purpleAccent,
+            Colors.deepPurpleAccent,
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+            blurRadius: 16,
+            spreadRadius: 1,
+          ),
+        ],
       ),
+      child: CircleAvatar(
+        radius: radius,
+        backgroundImage: image,
+        backgroundColor: const Color(0xFF1A0533),
+      ),
+    );
+  }
+}
+
+// Scaled detail row — icon size and font driven by scale factor.
+class _ScaledDetailRow extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final double scale;
+
+  const _ScaledDetailRow({
+    required this.icon,
+    required this.text,
+    required this.scale,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon,
+            size: 16 * scale, color: Colors.deepPurpleAccent.shade100),
+        SizedBox(width: 8 * scale),
+        Expanded(
+          child: Text(
+            text,
+            style: GoogleFonts.montserrat(
+              fontSize: 13 * scale,
+              color: Colors.white70,
+              height: 1.5,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -267,18 +351,19 @@ class _MobileCard extends StatelessWidget {
 
 class _MobileBadgeGrid extends StatelessWidget {
   final List<LanguageBadgeData> badges;
+  final double scale;
 
-  const _MobileBadgeGrid({required this.badges});
+  const _MobileBadgeGrid({required this.badges, this.scale = 1.0});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      padding: EdgeInsets.fromLTRB(16 * scale, 12 * scale, 16 * scale, 0),
       child: Wrap(
-        spacing: 12,
-        runSpacing: 12,
+        spacing: 10 * scale,
+        runSpacing: 10 * scale,
         alignment: WrapAlignment.center,
-        children: badges.map((b) => LanguageBadge(data: b)).toList(),
+        children: badges.map((b) => LanguageBadge(data: b, scale: scale)).toList(),
       ),
     );
   }
@@ -692,35 +777,38 @@ class _TrainerCardBack extends StatelessWidget {
   // ── Unbounded layout — fallback, content determines height ────────────────
 
   Widget _unboundedLayout() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _header(),
-        const SizedBox(height: 10),
-        const _CardDivider(label: 'BIO'),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-          child: Text(
-            _bio,
-            style: GoogleFonts.montserrat(
-              fontSize: 13,
-              color: Colors.white70,
-              height: 1.65,
+    return LayoutBuilder(builder: (context, constraints) {
+      final s = (constraints.maxWidth / 360.0).clamp(0.6, 1.2);
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _header(),
+          SizedBox(height: 10 * s),
+          const _CardDivider(label: 'BIO'),
+          Padding(
+            padding: EdgeInsets.fromLTRB(20 * s, 14 * s, 20 * s, 0),
+            child: Text(
+              _bio,
+              style: GoogleFonts.montserrat(
+                fontSize: 13 * s,
+                color: Colors.white70,
+                height: 1.65,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 16),
-        const _CardDivider(label: 'AT A GLANCE'),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: _stats.map((s) => _StatBadge(item: s)).toList(),
+          SizedBox(height: 16 * s),
+          const _CardDivider(label: 'AT A GLANCE'),
+          Padding(
+            padding: EdgeInsets.fromLTRB(20 * s, 16 * s, 20 * s, 20 * s),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: _stats.map((s) => _StatBadge(item: s)).toList(),
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   // ── Shared header ─────────────────────────────────────────────────────────
@@ -1102,8 +1190,9 @@ class _BadgeRow extends StatelessWidget {
 
 class LanguageBadge extends StatefulWidget {
   final LanguageBadgeData data;
+  final double scale;
 
-  const LanguageBadge({super.key, required this.data});
+  const LanguageBadge({super.key, required this.data, this.scale = 1.0});
 
   @override
   State<LanguageBadge> createState() => _LanguageBadgeState();
@@ -1115,6 +1204,7 @@ class _LanguageBadgeState extends State<LanguageBadge> {
   @override
   Widget build(BuildContext context) {
     final color = widget.data.color;
+    final s = widget.scale;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -1123,8 +1213,8 @@ class _LanguageBadgeState extends State<LanguageBadge> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOut,
-        width: 72,
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        width: 72 * s,
+        padding: EdgeInsets.symmetric(vertical: 10 * s),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: _hovered
@@ -1147,10 +1237,9 @@ class _LanguageBadgeState extends State<LanguageBadge> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── icon ──────────────────────────────────────────────────────
             AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              padding: const EdgeInsets.all(10),
+              padding: EdgeInsets.all(10 * s),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: color.withValues(alpha: _hovered ? 0.30 : 0.15),
@@ -1162,25 +1251,21 @@ class _LanguageBadgeState extends State<LanguageBadge> {
                         _hovered ? color : Colors.white54,
                         BlendMode.srcIn,
                       ),
-                      // Optional: apply color
-                      width: 24,
-                      // Optional: set size
-                      height: 24, // Optional: set size
+                      width: 24 * s,
+                      height: 24 * s,
                     )
-                  // Image.asset(widget.data.assetPath!, width: 24, height: 24)
                   : Icon(
                       widget.data.fallbackIcon ?? Icons.code,
-                      size: 24,
+                      size: 24 * s,
                       color: _hovered ? color : Colors.white54,
                     ),
             ),
-            const SizedBox(height: 6),
-            // ── label ─────────────────────────────────────────────────────
+            SizedBox(height: 6 * s),
             Text(
               widget.data.label,
               textAlign: TextAlign.center,
               style: GoogleFonts.electrolize(
-                fontSize: 11,
+                fontSize: 11 * s,
                 color: _hovered ? Colors.white : Colors.white60,
                 letterSpacing: 0.8,
                 fontWeight: FontWeight.w600,

@@ -259,6 +259,5 @@ cues—that was really satisfying. What started as a simple OpenGL renderer turn
 create compelling experiences.
 
 This project really validated data-oriented design and modern C++ techniques for game development. It also showed me how
-important it is to pick the right algorithms and optimize carefully. Every challenge I worked through—from those
-floating-point precision errors in collision detection to visualizing 3D hierarchical grids—helped me understand game
-engine architecture and real-time graphics programming way better.
+important it is to pick the right algorithms and optimize carefully. Every challenge I worked through helped me gain a deeper
+understanding of game engine architecture and real-time graphics programming.
