@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:website/widgets/dynamic_widget.dart';
+import 'dynamic_widget.dart';
 import 'dart:math' show pi;
+
+import '../theme/custom_icons.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data model for a language badge
@@ -27,18 +29,46 @@ class LanguageBadgeData {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const List<LanguageBadgeData> _defaultBadges = [
-  LanguageBadgeData(label: 'C++',    fallbackIcon: FontAwesomeIcons.code,            color: Color(0xFF00599C)),
-  LanguageBadgeData(label: 'Java',   fallbackIcon: FontAwesomeIcons.java,            color: Color(0xFFED8B00)),
-  LanguageBadgeData(label: 'Python', fallbackIcon: FontAwesomeIcons.python,              color: Color(
-      0xFFFFE873)),
-  LanguageBadgeData(label: 'Flutter',     fallbackIcon: FontAwesomeIcons.flutter,               color: Color(
-      0xFF0075FF)),
-  LanguageBadgeData(label: 'Dart',   fallbackIcon: FontAwesomeIcons.dartLang,      color: Color(0xFF0175C2)),
-  LanguageBadgeData(label: 'JavaScript',   fallbackIcon: FontAwesomeIcons.js,      color: Color(
-      0xFFFFEA00)),
-  LanguageBadgeData(label: 'React',    fallbackIcon: FontAwesomeIcons.react,           color: Color(
-      0xFF00F7FF)),
-  LanguageBadgeData(label: 'HTML',   fallbackIcon: FontAwesomeIcons.html5,              color: Color(0xFFE44D26)),
+  LanguageBadgeData(
+    label: 'C++',
+    fallbackIcon: CustomIcons.cPlusPlus,
+    color: Color(0xFF00599C),
+  ),
+  LanguageBadgeData(
+    label: 'Java',
+    fallbackIcon: FontAwesomeIcons.java,
+    color: Color(0xFFED8B00),
+  ),
+  LanguageBadgeData(
+    label: 'Python',
+    fallbackIcon: FontAwesomeIcons.python,
+    color: Color(0xFFFFE873),
+  ),
+  LanguageBadgeData(
+    label: 'Flutter',
+    fallbackIcon: FontAwesomeIcons.flutter,
+    color: Color(0xFF0075FF),
+  ),
+  LanguageBadgeData(
+    label: 'Dart',
+    fallbackIcon: FontAwesomeIcons.dartLang,
+    color: Color(0xFF0175C2),
+  ),
+  LanguageBadgeData(
+    label: 'JavaScript',
+    fallbackIcon: FontAwesomeIcons.js,
+    color: Color(0xFFFFEA00),
+  ),
+  LanguageBadgeData(
+    label: 'React',
+    fallbackIcon: FontAwesomeIcons.react,
+    color: Color(0xFF00F7FF),
+  ),
+  LanguageBadgeData(
+    label: 'HTML',
+    fallbackIcon: FontAwesomeIcons.html5,
+    color: Color(0xFFE44D26),
+  ),
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -55,15 +85,15 @@ class ProfileCard extends DynamicWidget {
 
   const ProfileCard({
     super.key,
-    this.name       = 'Marcus Winter',
-    this.title      = 'Software Engineer',
-    this.education  = 'M.Sc. Computer Science — Brown University',
-    this.interests  = const [
+    this.name = 'Marcus Winter',
+    this.title = 'Software Engineer',
+    this.education = 'M.Sc. Computer Science — Brown University',
+    this.interests = const [
       'Game Development',
       'Computer Graphics',
       'Full-Stack Development',
     ],
-    this.badges     = _defaultBadges,
+    this.badges = _defaultBadges,
     this.profileImage = const AssetImage('assets/images/profile_picture.png'),
   });
 
@@ -71,13 +101,13 @@ class ProfileCard extends DynamicWidget {
 
   // Shared inner card — _FlippableCard dispatches mobile/desktop internally.
   _FlippableCard _flippableCard() => _FlippableCard(
-        name: name,
-        title: title,
-        education: education,
-        interests: interests,
-        badges: badges,
-        profileImage: profileImage,
-      );
+    name: name,
+    title: title,
+    education: education,
+    interests: interests,
+    badges: badges,
+    profileImage: profileImage,
+  );
 
   @override
   Widget desktopView(BuildContext context) {
@@ -154,72 +184,78 @@ class _MobileCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 28),
-          // ── Avatar centred at the top ──────────────────────────────────
-          Center(child: _ProfileAvatar(image: profileImage)),
-          const SizedBox(height: 20),
-          // ── Name + title chip ──────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  name,
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.michroma(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 1.4,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 28),
+            // ── Avatar centred at the top ──────────────────────────────────
+            Center(child: _ProfileAvatar(image: profileImage)),
+            const SizedBox(height: 20),
+            // ── Name + title chip ──────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.michroma(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 1.4,
                     ),
                   ),
-                  child: Text(
-                    title,
-                    style: GoogleFonts.electrolize(
-                      fontSize: 12,
-                      color: Colors.deepPurpleAccent.shade100,
-                      letterSpacing: 1.2,
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    child: Text(
+                      title,
+                      style: GoogleFonts.electrolize(
+                        fontSize: 12,
+                        color: Colors.deepPurpleAccent.shade100,
+                        letterSpacing: 1.2,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          // ── Detail rows ───────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                _DetailRow(icon: Icons.school_outlined, text: education),
-                const SizedBox(height: 8),
-                _DetailRow(
-                  icon: Icons.interests_outlined,
-                  text: interests.join(' · '),
-                ),
-              ],
+            const SizedBox(height: 16),
+            // ── Detail rows ───────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  _DetailRow(icon: Icons.school_outlined, text: education),
+                  const SizedBox(height: 8),
+                  _DetailRow(
+                    icon: Icons.interests_outlined,
+                    text: interests.join(' · '),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          // ── Badge grid — wraps onto multiple rows ─────────────────────
-          _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
-          _MobileBadgeGrid(badges: badges),
-          const SizedBox(height: 20),
-        ],
+            const SizedBox(height: 20),
+            // ── Badge grid — wraps onto multiple rows ─────────────────────
+            const _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
+            _MobileBadgeGrid(badges: badges),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -277,7 +313,10 @@ class _FlippableCard extends DynamicStatefulWidget {
 class _FlippableCardState extends DynamicState<_FlippableCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
-  late final Animation<double> _angle; // 0 → pi
+  late final Animation<double> _angle;
+
+  // Tracks the last rendered layout mode so we can react to resizes.
+  bool? _wasMobile;
 
   bool get _showingBack => _ctrl.value >= 0.5;
 
@@ -296,9 +335,10 @@ class _FlippableCardState extends DynamicState<_FlippableCard>
       vsync: this,
       duration: const Duration(milliseconds: 550),
     );
-    _angle = Tween<double>(begin: 0, end: pi).animate(
-      CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut),
-    );
+    _angle = Tween<double>(
+      begin: 0,
+      end: pi,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override
@@ -307,10 +347,27 @@ class _FlippableCardState extends DynamicState<_FlippableCard>
     super.dispose();
   }
 
+  /// Called at the top of build(). If the layout mode has changed since the
+  /// last frame, snap back to the front face and invalidate the mobile height
+  /// measurement so it is re-taken in the new layout.
+  void _handleModeChange(bool isMobile) {
+    if (_wasMobile == isMobile) return;
+    _wasMobile = isMobile;
+    // Snap the flip to the front face immediately (no animation).
+    _ctrl.value = 0;
+    // Invalidate the cached mobile height — it must be re-measured because
+    // the available width has changed.
+    _mobileCardHeight = null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final isMobile = width < kMobileBreakpoint;
+
+    // Must come before any widget is built — resets flip + measurement
+    // if the layout mode has changed since the last frame.
+    _handleModeChange(isMobile);
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
@@ -349,75 +406,79 @@ class _FlippableCardState extends DynamicState<_FlippableCard>
   double? _mobileCardHeight;
 
   Widget _buildMobileFlip(BuildContext context) {
-    // Phase 1: front face is visible — measure its natural height.
-    if (_mobileCardHeight == null) {
-      return _MeasureWidget(
-        child: mobileView(context),
-        onMeasured: (size) {
-          // Schedule after the current frame to avoid setState mid-build.
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) setState(() => _mobileCardHeight = size.height);
-          });
-        },
-      );
-    }
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth;
 
-    // Phase 2: height is known — lock both faces to it.
-    final h = _mobileCardHeight!;
-    return SizedBox(
-      height: h,
-      child: AnimatedBuilder(
-        animation: _angle,
-        builder: (context, _) {
-          final showBack = _ctrl.value >= 0.5;
-          final faceAngle = showBack ? _angle.value - pi : _angle.value;
-          return Transform(
-            alignment: Alignment.center,
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.001)   // perspective for X-axis flip
-              ..rotateY(faceAngle),
-            child: SizedBox(
-              height: h,
-              child: showBack
-                  ? _TrainerCardBack(
-                      name: widget.name,
-                      title: widget.title,
-                      fixedHeight: h,
-                    )
-                  : mobileView(context),
-            ),
+        // Phase 1: measure the front face at the actual available width.
+        if (_mobileCardHeight == null) {
+          return _MeasureWidget(
+            // Constrain to the real width so Wrap reflows correctly.
+            child: SizedBox(width: availableWidth, child: mobileView(context)),
+            onMeasured: (size) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) setState(() => _mobileCardHeight = size.height);
+              });
+            },
           );
-        },
-      ),
+        }
+
+        // Phase 2: height is known — lock both faces to it.
+        final h = _mobileCardHeight!;
+        return SizedBox(
+          height: h,
+          child: AnimatedBuilder(
+            animation: _angle,
+            builder: (context, _) {
+              final showBack = _ctrl.value >= 0.5;
+              final faceAngle = showBack ? _angle.value - pi : _angle.value;
+              return Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.001)
+                  ..rotateY(faceAngle),
+                child: SizedBox(
+                  height: h,
+                  child: showBack
+                      ? _TrainerCardBack(
+                          name: widget.name,
+                          title: widget.title,
+                          fixedHeight: h,
+                        )
+                      : mobileView(context),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _backFace() => _TrainerCardBack(
-        name: widget.name,
-        title: widget.title,
-      );
+  Widget _backFace() =>
+      _TrainerCardBack(name: widget.name, title: widget.title);
 
   // ── DynamicState interface ────────────────────────────────────────────────
 
   @override
   Widget desktopView(BuildContext context) => _TrainerCard(
-        name: widget.name,
-        title: widget.title,
-        education: widget.education,
-        interests: widget.interests,
-        badges: widget.badges,
-        profileImage: widget.profileImage,
-      );
+    name: widget.name,
+    title: widget.title,
+    education: widget.education,
+    interests: widget.interests,
+    badges: widget.badges,
+    profileImage: widget.profileImage,
+  );
 
   @override
   Widget mobileView(BuildContext context) => _MobileCard(
-        name: widget.name,
-        title: widget.title,
-        education: widget.education,
-        interests: widget.interests,
-        badges: widget.badges,
-        profileImage: widget.profileImage,
-      );
+    name: widget.name,
+    title: widget.title,
+    education: widget.education,
+    interests: widget.interests,
+    badges: widget.badges,
+    profileImage: widget.profileImage,
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -512,7 +573,7 @@ class _TrainerCard extends StatelessWidget {
             profileImage: profileImage,
           ),
           const Spacer(),
-          _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
+          const _CardDivider(label: 'LANGUAGES & TECHNOLOGIES'),
           _BadgeRow(badges: badges),
           const SizedBox(height: 18),
         ],
@@ -528,24 +589,23 @@ class _TrainerCard extends StatelessWidget {
 class _TrainerCardBack extends StatelessWidget {
   final String name;
   final String title;
+
   /// When provided (mobile flip), the card is locked to this height and the
   /// bio becomes scrollable so it never overflows.
   final double? fixedHeight;
 
   static const String _bio =
       "I'm a software engineer with a passion for building things that sit at "
-      "the intersection of performance and creativity — from physics simulations "
-      "and real-time graphics to full-stack web tools.\n\n"
-      "My background spans game engine architecture, GPU shader programming, and "
-      "modern web development with Flutter & Dart. I enjoy the challenge of "
-      "translating complex technical problems into clean, maintainable code.\n\n"
-      "Outside of work I spend my time tinkering with procedural generation, "
-      "competitive programming, and the occasional tabletop RPG campaign.";
+      'the intersection of performance and creativity — from physics simulations '
+      'and real-time graphics to full-stack web tools.\n\n'
+      'My background spans game engine architecture, GPU shader programming, and '
+      'modern web development with Flutter & Dart. I enjoy the challenge of '
+      'translating complex technical problems into clean, maintainable code.\n\n';
 
   static const List<_StatItem> _stats = [
-    _StatItem(label: 'YEARS CODING',     value: '8+'),
+    _StatItem(label: 'YEARS CODING', value: '8+'),
     _StatItem(label: 'PROJECTS SHIPPED', value: '20+'),
-    _StatItem(label: 'CUPS OF COFFEE',   value: '∞'),
+    _StatItem(label: 'CUPS OF COFFEE', value: '∞'),
   ];
 
   const _TrainerCardBack({
@@ -556,38 +616,41 @@ class _TrainerCardBack extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      // Treat as height-bounded if either the parent gave a bounded height
-      // (desktop FittedBox) or a fixedHeight was passed explicitly (mobile).
-      final effectiveHeight = fixedHeight ??
-          (constraints.hasBoundedHeight ? constraints.maxHeight : null);
-      final bounded = effectiveHeight != null;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Treat as height-bounded if either the parent gave a bounded height
+        // (desktop FittedBox) or a fixedHeight was passed explicitly (mobile).
+        final effectiveHeight =
+            fixedHeight ??
+            (constraints.hasBoundedHeight ? constraints.maxHeight : null);
+        final bounded = effectiveHeight != null;
 
-      return Container(
-        height: effectiveHeight,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF311B92), Color(0xFF1A0533)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
-            width: 1.5,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.deepPurple.withValues(alpha: 0.55),
-              blurRadius: 32,
-              spreadRadius: 2,
-              offset: const Offset(0, 8),
+        return Container(
+          height: effectiveHeight,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF311B92), Color(0xFF1A0533)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ],
-        ),
-        child: bounded ? _boundedLayout() : _unboundedLayout(),
-      );
-    });
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.deepPurpleAccent.withValues(alpha: 0.6),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.deepPurple.withValues(alpha: 0.55),
+                blurRadius: 32,
+                spreadRadius: 2,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: bounded ? _boundedLayout() : _unboundedLayout(),
+        );
+      },
+    );
   }
 
   // ── Bounded layout (desktop + mobile-flip) ────────────────────────────────
@@ -600,7 +663,7 @@ class _TrainerCardBack extends StatelessWidget {
       children: [
         _header(),
         const SizedBox(height: 10),
-        _CardDivider(label: 'BIO'),
+        const _CardDivider(label: 'BIO'),
         Expanded(
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(28, 14, 28, 8),
@@ -614,7 +677,7 @@ class _TrainerCardBack extends StatelessWidget {
             ),
           ),
         ),
-        _CardDivider(label: 'AT A GLANCE'),
+        const _CardDivider(label: 'AT A GLANCE'),
         Padding(
           padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
           child: Row(
@@ -635,7 +698,7 @@ class _TrainerCardBack extends StatelessWidget {
       children: [
         _header(),
         const SizedBox(height: 10),
-        _CardDivider(label: 'BIO'),
+        const _CardDivider(label: 'BIO'),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
           child: Text(
@@ -648,7 +711,7 @@ class _TrainerCardBack extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        _CardDivider(label: 'AT A GLANCE'),
+        const _CardDivider(label: 'AT A GLANCE'),
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
           child: Row(
@@ -683,7 +746,10 @@ class _TrainerCardBack extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(4),
@@ -706,7 +772,7 @@ class _TrainerCardBack extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.touch_app_outlined, size: 13, color: Colors.white24),
+              const Icon(Icons.touch_app_outlined, size: 13, color: Colors.white24),
               const SizedBox(width: 4),
               Text(
                 'TAP TO FLIP',
@@ -731,11 +797,13 @@ class _TrainerCardBack extends StatelessWidget {
 class _StatItem {
   final String label;
   final String value;
+
   const _StatItem({required this.label, required this.value});
 }
 
 class _StatBadge extends StatelessWidget {
   final _StatItem item;
+
   const _StatBadge({required this.item});
 
   @override
@@ -823,7 +891,11 @@ class _ProfileAvatar extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: const SweepGradient(
-          colors: [Colors.deepPurpleAccent, Colors.purpleAccent, Colors.deepPurpleAccent],
+          colors: [
+            Colors.deepPurpleAccent,
+            Colors.purpleAccent,
+            Colors.deepPurpleAccent,
+          ],
         ),
         boxShadow: [
           BoxShadow(
@@ -897,10 +969,7 @@ class _ProfileDetails extends StatelessWidget {
         const SizedBox(height: 14),
         _DetailRow(icon: Icons.school_outlined, text: education),
         const SizedBox(height: 8),
-        _DetailRow(
-          icon: Icons.interests_outlined,
-          text: interests.join(' · '),
-        ),
+        _DetailRow(icon: Icons.interests_outlined, text: interests.join(' · ')),
       ],
     );
   }
@@ -1014,10 +1083,12 @@ class _BadgeRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           children: badges
-              .map((b) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: LanguageBadge(data: b),
-                  ))
+              .map(
+                (b) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: LanguageBadge(data: b),
+                ),
+              )
               .toList(),
         ),
       ),
@@ -1048,7 +1119,7 @@ class _LanguageBadgeState extends State<LanguageBadge> {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
-      onExit:  (_) => setState(() => _hovered = false),
+      onExit: (_) => setState(() => _hovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOut,
@@ -1060,17 +1131,17 @@ class _LanguageBadgeState extends State<LanguageBadge> {
               ? color.withValues(alpha: 0.22)
               : Colors.white.withValues(alpha: 0.05),
           border: Border.all(
-            color: _hovered
-                ? color
-                : Colors.white.withValues(alpha: 0.12),
+            color: _hovered ? color : Colors.white.withValues(alpha: 0.12),
             width: 1.4,
           ),
           boxShadow: _hovered
-              ? [BoxShadow(
-                  color: color.withValues(alpha: 0.45),
-                  blurRadius: 12,
-                  spreadRadius: 1,
-                )]
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.45),
+                    blurRadius: 12,
+                    spreadRadius: 1,
+                  ),
+                ]
               : [],
         ),
         child: Column(
@@ -1085,7 +1156,18 @@ class _LanguageBadgeState extends State<LanguageBadge> {
                 color: color.withValues(alpha: _hovered ? 0.30 : 0.15),
               ),
               child: widget.data.assetPath != null
-                  ? Image.asset(widget.data.assetPath!, width: 24, height: 24)
+                  ? SvgPicture.asset(
+                      widget.data.assetPath!,
+                      colorFilter: ColorFilter.mode(
+                        _hovered ? color : Colors.white54,
+                        BlendMode.srcIn,
+                      ),
+                      // Optional: apply color
+                      width: 24,
+                      // Optional: set size
+                      height: 24, // Optional: set size
+                    )
+                  // Image.asset(widget.data.assetPath!, width: 24, height: 24)
                   : Icon(
                       widget.data.fallbackIcon ?? Icons.code,
                       size: 24,
@@ -1110,8 +1192,3 @@ class _LanguageBadgeState extends State<LanguageBadge> {
     );
   }
 }
-
-
-
-
-

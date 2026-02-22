@@ -8,6 +8,7 @@ over the course of the semester, culminating in a 4-week final project to build 
 ### Skills: Java, Game Engine development, Sprite creation, Pathfinding, AI, Physics
 
 <!-- Video Here -->
+<video src="zombies_demo.mp4"> </video>
 
 ## Overview
 The engine was developed over the course of the semester as part of Brown University's CSCI 1950n - "2D Game Engines" course.

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 export 'package:website/router.dart';
-import 'package:website/theme/text_theme.dart';
-import 'package:website/widgets/site_widgets.dart';
+import '../widgets/markdown_renderer.dart';
+import '../widgets/site_widgets.dart';
 
-export 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+export '../widgets/markdown_renderer.dart';
 export '../widgets/video_player.dart';
 export 'package:url_launcher/url_launcher.dart';
+export 'package:flutter/material.dart';
+
 
 class ProjectPageView extends StatelessWidget {
-  final Column content;
+  final String markdownPath;
 
-  const ProjectPageView({super.key, required this.content});
+  const ProjectPageView({super.key, required this.markdownPath});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,16 @@ class ProjectPageView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            constraints: BoxConstraints(maxWidth: 800),
-            child: content,
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: MarkdownRenderer(path: markdownPath),
+                ),
+              ],
+            ),
           ),
         ),
       ),

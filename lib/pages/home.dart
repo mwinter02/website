@@ -1,69 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:website/theme/theme.dart';
-import 'package:website/widgets/dynamic_widget.dart';
-import 'package:website/router.dart';
-import 'package:website/widgets/profile_card.dart';
-import 'package:website/widgets/project_card.dart';
-import 'package:website/widgets/site_widgets.dart';
+import '../theme/theme.dart';
+import '../widgets/dynamic_widget.dart';
+import '../router.dart';
+import '../widgets/profile_card.dart';
+import '../widgets/project_card.dart';
+import '../widgets/site_widgets.dart';
+import 'projects.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Project data — add new projects here, tags wire up the filter bar
 // automatically.
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _Project {
-  final String route;
-  final String imagePath;
-  final String title;
-  final String description;
-  final List<String> tags;
 
-  const _Project({
-    required this.route,
-    required this.imagePath,
-    required this.title,
-    required this.description,
-    required this.tags,
-  });
-}
-
-const List<_Project> _projects = [
-  _Project(
-    route: RouteNames.zombies,
-    imagePath: 'assets/images/banners/zombies.png',
-    title: 'Zombies',
-    description: 'A top-down survival shooter with procedural pathfinding and skeletal animation.',
-    tags: ['Games', 'Java'],
-  ),
-  _Project(
-    route: RouteNames.pngchaser,
-    imagePath: 'assets/images/banners/pngchaser.png',
-    title: 'PNG Chaser',
-    description: 'Real-time image processing tool built around custom rendering pipelines.',
-    tags: ['C++', 'Games'],
-  ),
-  _Project(
-    route: RouteNames.collider,
-    imagePath: 'assets/images/banners/collider.png',
-    title: 'Interactive Collider Design',
-    description: 'Physics-based collision editor with live GLSL shader visualisation.',
-    tags: ['Graphics', 'Tools'],
-  ),
-  _Project(
-      route: RouteNames.terrain,
-      imagePath: 'assets/images/banners/terrainpainter.png',
-      title: 'Terrain Painter',
-      description: 'Procedural terrain generation from 2D paintings',
-      tags: ['C++', 'OpenGL']
-  ),
-  _Project(
-      route: RouteNames.airobic,
-      imagePath: 'assets/images/banners/airobic.png',
-      title: 'AIRobic',
-      description: 'AI powered workout generator',
-      tags: ['AI', 'React', 'Full Stack'])
-];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Page
@@ -81,13 +30,15 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
 
   List<String> get _allTags {
     final tags = <String>{};
-    for (final p in _projects) tags.addAll(p.tags);
+    for (final p in Projects.all) {
+      tags.addAll(p.tags);
+    }
     return tags.toList()..sort();
   }
 
-  List<_Project> get _filtered => _activeTag == null
-      ? _projects
-      : _projects.where((p) => p.tags.contains(_activeTag)).toList();
+  List<Project> get _filtered => _activeTag == null
+      ? Projects.all
+      : Projects.all.where((p) => p.tags.contains(_activeTag)).toList();
 
   @override
   Widget desktopView(BuildContext context) {
@@ -97,7 +48,7 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: ProfileCard()),
+            const Center(child: ProfileCard()),
             // Thin accent rule — replaces the old heavy banner
             Container(
               height: 1.5,
@@ -132,7 +83,7 @@ class _MyHomePageState extends DynamicState<MyHomePage> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _ProjectsSection extends StatelessWidget {
-  final List<_Project> projects;
+  final List<Project> projects;
   final List<String> allTags;
   final String? activeTag;
   final ValueChanged<String?> onTagSelected;
@@ -298,7 +249,7 @@ const double _gridMaxWidth = 1200;
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _FeaturedGrid extends StatefulWidget {
-  final List<_Project> projects;
+  final List<Project> projects;
   const _FeaturedGrid({required this.projects});
 
   @override
@@ -345,7 +296,9 @@ class _FeaturedGridState extends State<_FeaturedGrid>
   void _rebuildIfModeChanged(_GridMode mode) {
     if (mode == _lastMode) return;
     _lastMode = mode;
-    for (final c in _controllers) c.dispose();
+    for (final c in _controllers) {
+      c.dispose();
+    }
     _buildAnimations(_rowCount(mode));
   }
 
@@ -368,7 +321,9 @@ class _FeaturedGridState extends State<_FeaturedGrid>
 
   @override
   void dispose() {
-    for (final c in _controllers) c.dispose();
+    for (final c in _controllers) {
+      c.dispose();
+    }
     super.dispose();
   }
 
@@ -398,7 +353,7 @@ class _FeaturedGridState extends State<_FeaturedGrid>
       if (_fades.isEmpty) return const SizedBox.shrink();
 
       final perRow = mode == _GridMode.hero ? 3 : mode == _GridMode.twoCol ? 2 : 1;
-      final rows = <List<_Project>>[];
+      final rows = <List<Project>>[];
       for (var i = 0; i < widget.projects.length; i += perRow) {
         rows.add(widget.projects
             .sublist(i, (i + perRow).clamp(0, widget.projects.length)));
@@ -432,7 +387,7 @@ class _FeaturedGridState extends State<_FeaturedGrid>
     });
   }
 
-  Widget _buildRow(List<_Project> row, int rowIndex, _GridMode mode) {
+  Widget _buildRow(List<Project> row, int rowIndex, _GridMode mode) {
     switch (mode) {
       case _GridMode.hero:
         return _HeroRow(projects: row, heroOnRight: rowIndex.isOdd);
@@ -449,7 +404,7 @@ class _FeaturedGridState extends State<_FeaturedGrid>
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _HeroRow extends StatelessWidget {
-  final List<_Project> projects;
+  final List<Project> projects;
   final bool heroOnRight;
 
   static const int _heroFlex = 3;
@@ -500,7 +455,7 @@ class _HeroRow extends StatelessWidget {
     );
   }
 
-  Widget _card(_Project p) => ProjectCard(
+  Widget _card(Project p) => ProjectCard(
         route: p.route,
         imagePath: p.imagePath,
         title: p.title,
@@ -514,7 +469,7 @@ class _HeroRow extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _UniformRow extends StatelessWidget {
-  final List<_Project> projects;
+  final List<Project> projects;
   final int columns;
 
   const _UniformRow({required this.projects, required this.columns});
@@ -543,7 +498,7 @@ class _UniformRow extends StatelessWidget {
     );
   }
 
-  Widget _card(_Project p) => ProjectCard(
+  Widget _card(Project p) => ProjectCard(
         route: p.route,
         imagePath: p.imagePath,
         title: p.title,

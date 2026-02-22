@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:website/theme/text_theme.dart';
+import 'text_theme.dart';
 
 // App bar uses a custom gradient painted via FlexibleSpaceBar, so we strip
 // the background colour here and let site_widgets.dart own the painting.
-final AppBarTheme appBarTheme = AppBarTheme(
+const AppBarTheme appBarTheme = AppBarTheme(
   backgroundColor: Colors.transparent,
   elevation: 0,
   scrolledUnderElevation: 0,

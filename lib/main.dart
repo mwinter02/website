@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:website/router.dart';
+import 'router.dart';
 import 'package:url_strategy/url_strategy.dart';
-import 'package:website/theme/theme.dart';
-import 'package:website/widgets/dynamic_widget.dart';
+import 'theme/theme.dart';
+import 'widgets/dynamic_widget.dart';
 
 void main() {
   setPathUrlStrategy();

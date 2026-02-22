@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:website/links.dart';
-import 'package:website/theme/theme.dart';
-
+import '../links.dart';
+import '../theme/theme.dart';
 import '../router.dart';
 import '../theme/text_theme.dart';
 
@@ -22,7 +21,7 @@ AppBar siteAppBar(BuildContext context) {
           // instead of overflowing.
           Flexible(
             child: TextButton(
-              onPressed: () => context.go(RouteNames.home),
+              onPressed: () => context.go(Routes.home.path),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,

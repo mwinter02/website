@@ -12,7 +12,9 @@ decomposing meshes and rigging colliders to animated skeletons.
 
 ### Skills: C++, Mesh Processing, Skinned Meshes, Computational Geometry, Assimp, OpenGL, UI Development
 
-<!-- Video/Image Here -->
+
+<video src="collider_demo.mp4"> </video>
+
 
 ## Overview
 

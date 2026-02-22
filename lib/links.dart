@@ -1,5 +1,3 @@
-
-
 const String _linkedIn = 'https://www.linkedin.com/in/mwinter02/';
 const String _emailAddress = 'marcuswinter2002@gmail.com';
 
