@@ -1,7 +1,6 @@
 import 'pages/home.dart';
 import 'pages/page_view.dart';
 import 'pages/projects.dart';
-import 'pages/under_construction.dart';
 
 export 'package:go_router/go_router.dart';
 
@@ -54,7 +53,7 @@ class Routes {
 
   static GoRoute home = GoRoute(
     path: homePath,
-    builder: (BuildContext context, GoRouterState state) => const MyHomePage(),
+    builder: (BuildContext context, GoRouterState state) => const HomePage(),
     routes: <RouteBase>[projects, ...projectRoutes],
   );
 }
