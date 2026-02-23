@@ -617,14 +617,17 @@ class _TrainerCardBack extends StatelessWidget {
   final String title;
 
   static const String _bio =
-      "I'm a software engineer with a passion for building things that sit at "
-      'the intersection of performance and creativity — from physics simulations '
-      'and real-time graphics to full-stack web tools.\n\n'
-      'My background spans game engine architecture, GPU shader programming, and '
-      'modern web development with Flutter & Dart. I enjoy the challenge of '
-      'translating complex technical problems into clean, maintainable code.\n\n';
+"""
+I'm a software engineer with a passion for game development, computer graphics, and full-stack development. I am finishing a Master's degree in Computer Science from Brown University this semester, where I specialized in visual computing and AI. I've created projects ranging from indie games to full-stack applications. I'm always eager to learn new technologies and take on challenging problems that push the boundaries of what's possible in software.
+Seeking job opportunities that allow me to apply my skills in a collaborative environment and contribute to innovative projects. Feel free to reach out if you'd like to connect or learn more about my work!
 
-  static const List<_StatItem> _stats = [];
+""";
+  static const List<_StatItem> _stats = [
+
+    _StatItem(label: 'Hours debugging', value: '10,000+'),
+    _StatItem(label: 'Favorite language', value: 'C++'),
+
+  ];
 
   const _TrainerCardBack({
     required this.name,
@@ -689,14 +692,14 @@ class _TrainerCardBack extends StatelessWidget {
             ),
           ),
         ),
-        // const _CardDivider(label: 'AT A GLANCE'),
-        // Padding(
-        //   padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        //     children: _stats.map((s) => _StatBadge(item: s)).toList(),
-        //   ),
-        // ),
+        const _CardDivider(label: 'AT A GLANCE'),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(28, 14, 28, 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: _stats.map((s) => _StatBadge(item: s)).toList(),
+          ),
+        ),
       ],
     );
   }
