@@ -45,7 +45,7 @@ The final result was a simple "Little Alchemy" game, where the player could comb
 
 > #### Game screenshot
 >
-> ![alc.png](/assets/images/projects/zombies/alc.png)
+> ![alc.png](../images/projects/zombies/alc.png)
 ### Project 2: Top-down Shooter
 The second project was to build a top-down shooter game.
 Building upon the first project, we implemented a game world which contained entities and components, allowing for more complex game logic.
@@ -56,7 +56,7 @@ engine systems. We also implemented a decision tree AI system and A-star pathfin
 
 > #### Game screenshot
 > 
-> ![wiz.png](/assets/images/projects/zombies/wiz.png)
+> ![wiz.png](../images/projects/zombies/wiz.png)
 
 ### Project 3: Physics-based platformer
 The third project was to build a physics-based platformer game.
@@ -66,7 +66,7 @@ and loading system using XML, allowing for a generic way to save and load game d
 Finally, we implemented raycasting, allowing for more complex interactions such as shooting and line of sight.
 > #### Game screenshot 
 > 
-> ![nin.png](/assets/images/projects/zombies/nin.png)
+> ![nin.png](../images/projects/zombies/nin.png)
 
 ### Final Project: Zombies
 The final project was an opportunity to build any game we wanted using the engine we had built. 
@@ -76,7 +76,7 @@ Then I implemented a string-pulling algorithm to smooth out the paths generated 
 
 > #### Navigation mesh and pathfinding development
 >
-> ![pathfinding.png](/assets/images/projects/zombies/pathfinding.png)
+> ![pathfinding.png](../images/projects/zombies/pathfinding.png)
 >
 
 Finally, I implemented a layered sprite system, allowing for more complex character animations and visual effects, such as separate layers for the body and head which could be animated independently.
@@ -86,11 +86,11 @@ using BlockBench and a custom macro to cycle through animation frames and armor 
 [//]: # (<img src="/assets/images/projects/zombies/legs_walk.png" alt="sprite sheet" width="200"/>)
 > #### Sprite sheet of the walking animation for the legs layer
 > 
-> ![legs_walk.png](/assets/images/projects/zombies/legs_walk.png)
+> ![legs_walk.png](../images/projects/zombies/legs_walk.png)
 > 
 > #### Head sprite sheet
 > 
-> ![head.png](/assets/images/projects/zombies/head.png)
+> ![head.png](../images/projects/zombies/head.png)
 > 
 Using a custom layered sprite system, I was able to create more complex animations and visual effects. For example, 
 the player and zombies have separate layers for the legs, body and head, allowing for independent animation of each layer. 
