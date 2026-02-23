@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/theme.dart';
+import 'contact_section.dart';
+import 'dynamic_widget.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AboutSection
@@ -14,20 +15,30 @@ import '../theme/theme.dart';
 // Desktop: three columns. Mobile: stacked vertically.
 // ─────────────────────────────────────────────────────────────────────────────
 
-class AboutSection extends StatelessWidget {
+class AboutSection extends DynamicWidget {
   const AboutSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget desktopView(BuildContext context) {
+    // TODO: implement desktopView
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _AboutHeader(),
         const SizedBox(height: 32),
-        LayoutBuilder(builder: (context, constraints) {
-          if (constraints.maxWidth >= 800) return _DesktopLayout();
-          return _MobileLayout();
-        }),
+        _DesktopLayout(),
+      ],
+    );
+  }
+
+  @override
+  Widget mobileView(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _AboutHeader(),
+        const SizedBox(height: 32),
+        _MobileLayout(),
       ],
     );
   }
@@ -100,36 +111,49 @@ class _AboutHeader extends StatelessWidget {
 class _DesktopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: _EntranceAnimation(
-              direction: _EntranceDirection.left,
-              delay: Duration.zero,
-              child: const _PhotoPanel(),
-            ),
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // ── Three-column row ───────────────────────────────────────────────
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: _EntranceAnimation(
+                  direction: _EntranceDirection.left,
+                  delay: Duration.zero,
+                  child: _PhotoPanel(),
+                ),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                flex: 2,
+                child: _EntranceAnimation(
+                  direction: _EntranceDirection.up,
+                  delay: Duration(milliseconds: 100),
+                  child: _BioPanel(),
+                ),
+              ),
+              SizedBox(width: 20),
+              Expanded(
+                child: _EntranceAnimation(
+                  direction: _EntranceDirection.right,
+                  delay: Duration(milliseconds: 200),
+                  child: _StatsPanel(),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 2,
-            child: _EntranceAnimation(
-              direction: _EntranceDirection.up,
-              delay: const Duration(milliseconds: 100),
-              child: const _BioPanel(),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Expanded(
-            child: _EntranceAnimation(
-              direction: _EntranceDirection.right,
-              delay: const Duration(milliseconds: 200),
-              child: const _StatsPanel(),
-            ),
-          ),
-        ],
-      ),
+        ),
+        // ── Fourth panel — full width ──────────────────────────────────────
+        SizedBox(height: 20),
+        _EntranceAnimation(
+          direction: _EntranceDirection.up,
+          delay: Duration(milliseconds: 300),
+          child: KnownProfilesPanel(),
+        ),
+      ],
     );
   }
 }
@@ -141,24 +165,30 @@ class _DesktopLayout extends StatelessWidget {
 class _MobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         _EntranceAnimation(
           direction: _EntranceDirection.up,
           delay: Duration.zero,
-          child: const _PhotoPanel(),
+          child: _PhotoPanel(),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         _EntranceAnimation(
           direction: _EntranceDirection.up,
-          delay: const Duration(milliseconds: 80),
-          child: const _BioPanel(),
+          delay: Duration(milliseconds: 80),
+          child: _BioPanel(),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         _EntranceAnimation(
           direction: _EntranceDirection.up,
-          delay: const Duration(milliseconds: 160),
-          child: const _StatsPanel(),
+          delay: Duration(milliseconds: 160),
+          child: _StatsPanel(),
+        ),
+        SizedBox(height: 20),
+        _EntranceAnimation(
+          direction: _EntranceDirection.up,
+          delay: Duration(milliseconds: 240),
+          child: KnownProfilesPanel(),
         ),
       ],
     );
@@ -194,9 +224,12 @@ class _EntranceAnimationState extends State<_EntranceAnimation>
 
   Offset get _beginOffset {
     switch (widget.direction) {
-      case _EntranceDirection.left:  return const Offset(-0.08, 0);
-      case _EntranceDirection.right: return const Offset(0.08, 0);
-      case _EntranceDirection.up:    return const Offset(0, 0.06);
+      case _EntranceDirection.left:
+        return const Offset(-0.08, 0);
+      case _EntranceDirection.right:
+        return const Offset(0.08, 0);
+      case _EntranceDirection.up:
+        return const Offset(0, 0.06);
     }
   }
 
@@ -207,9 +240,11 @@ class _EntranceAnimationState extends State<_EntranceAnimation>
       vsync: this,
       duration: const Duration(milliseconds: 550),
     );
-    _fade  = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
-    _slide = Tween<Offset>(begin: _beginOffset, end: Offset.zero)
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+    _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    _slide = Tween<Offset>(
+      begin: _beginOffset,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
 
     Future.delayed(widget.delay, () {
       if (mounted) _ctrl.forward();
@@ -224,9 +259,9 @@ class _EntranceAnimationState extends State<_EntranceAnimation>
 
   @override
   Widget build(BuildContext context) => FadeTransition(
-        opacity: _fade,
-        child: SlideTransition(position: _slide, child: widget.child),
-      );
+    opacity: _fade,
+    child: SlideTransition(position: _slide, child: widget.child),
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -275,6 +310,7 @@ class _PhotoEntry {
   final String assetPath;
   final String caption;
   final String sub;
+
   const _PhotoEntry({
     required this.assetPath,
     required this.caption,
@@ -334,7 +370,6 @@ class _PhotoPanelState extends State<_PhotoPanel>
   // width.  Built in _cycle() so it always targets the correct card.
   late Animation<double> _slideAnim;
 
-
   int get _nextIndex => (_topIndex + 1) % _deck.length;
 
   // Paint order: cards further from _topIndex paint first (deepest in stack).
@@ -344,24 +379,20 @@ class _PhotoPanelState extends State<_PhotoPanel>
       // Outgoing card goes behind everything — paint it first.
       return [
         _topIndex,
-        ...indices.where((i) => i != _topIndex)
-            .toList()
-          ..sort((a, b) {
-            final da = (a - _topIndex + _deck.length) % _deck.length;
-            final db = (b - _topIndex + _deck.length) % _deck.length;
-            return db.compareTo(da);
-          }),
+        ...indices.where((i) => i != _topIndex).toList()..sort((a, b) {
+          final da = (a - _topIndex + _deck.length) % _deck.length;
+          final db = (b - _topIndex + _deck.length) % _deck.length;
+          return db.compareTo(da);
+        }),
       ];
     }
     // Normal: deepest slot paints first, top card paints last.
-    return indices
-      ..sort((a, b) {
-        final da = (a - _topIndex + _deck.length) % _deck.length;
-        final db = (b - _topIndex + _deck.length) % _deck.length;
-        return db.compareTo(da);
-      });
+    return indices..sort((a, b) {
+      final da = (a - _topIndex + _deck.length) % _deck.length;
+      final db = (b - _topIndex + _deck.length) % _deck.length;
+      return db.compareTo(da);
+    });
   }
-
 
   @override
   void initState() {
@@ -404,13 +435,17 @@ class _PhotoPanelState extends State<_PhotoPanel>
     // in underneath the stack.
     _slideAnim = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.0, end: 1.5)
-            .chain(CurveTween(curve: Curves.easeInCubic)),
+        tween: Tween(
+          begin: 0.0,
+          end: 1.5,
+        ).chain(CurveTween(curve: Curves.easeInCubic)),
         weight: 50,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.5, end: 0.0)
-            .chain(CurveTween(curve: Curves.easeOutCubic)),
+        tween: Tween(
+          begin: 1.5,
+          end: 0.0,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
         weight: 50,
       ),
     ]).animate(_ctrl);
@@ -438,8 +473,11 @@ class _PhotoPanelState extends State<_PhotoPanel>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.touch_app_outlined,
-                    size: 12, color: Colors.white24),
+                const Icon(
+                  Icons.touch_app_outlined,
+                  size: 12,
+                  color: Colors.white24,
+                ),
                 const SizedBox(width: 5),
                 Text(
                   'TAP TO CYCLE',
@@ -457,21 +495,19 @@ class _PhotoPanelState extends State<_PhotoPanel>
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: _cycle,
-              child: ClipRect(
-                child: AspectRatio(
-                  aspectRatio: 3 / 4,
-                  child: AnimatedBuilder(
-                    animation: _ctrl,
-                    builder: (context, _) {
-                      final isReturning = _animating && _ctrl.value >= 0.5;
-                      final paintOrder = _paintOrder(outgoingBehind: isReturning);
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.center,
-                        children: paintOrder.map(_buildCard).toList(),
-                      );
-                    },
-                  ),
+              child: AspectRatio(
+                aspectRatio: 3 / 4,
+                child: AnimatedBuilder(
+                  animation: _ctrl,
+                  builder: (context, _) {
+                    final isReturning = _animating && _ctrl.value >= 0.5;
+                    final paintOrder = _paintOrder(outgoingBehind: isReturning);
+                    return Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.center,
+                      children: paintOrder.map(_buildCard).toList(),
+                    );
+                  },
                 ),
               ),
             ),
@@ -519,6 +555,7 @@ class _PhotoPanelState extends State<_PhotoPanel>
 
 class _PhotoCard extends StatelessWidget {
   final _PhotoEntry entry;
+
   const _PhotoCard({required this.entry});
 
   @override
@@ -548,9 +585,7 @@ class _PhotoCard extends StatelessWidget {
             Positioned.fill(
               child: Image.asset(entry.assetPath, fit: BoxFit.cover),
             ),
-            Positioned.fill(
-              child: CustomPaint(painter: _ScanlinePainter()),
-            ),
+            Positioned.fill(child: CustomPaint(painter: _ScanlinePainter())),
           ],
         ),
       ),
@@ -565,6 +600,7 @@ class _PhotoCard extends StatelessWidget {
 class _Caption extends StatelessWidget {
   final _PhotoEntry entry;
   final Animation<double> opacity;
+
   const _Caption({required this.entry, required this.opacity});
 
   @override
@@ -587,7 +623,8 @@ class _Caption extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 6, height: 6,
+                width: 6,
+                height: 6,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Color(0xFF00E676),
@@ -634,37 +671,37 @@ class _BioPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _PanelContainer(
+    return const _PanelContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _TerminalLabel('WHO_AM_I'),
-          const SizedBox(height: 14),
-          const _BioText(
+          _TerminalLabel('WHO_AM_I'),
+          SizedBox(height: 14),
+          _BioText(
             "I'm a software engineer based in Providence, RI. I got into "
-            "programming through game modding as a kid — tweaking Minecraft "
-            "configs led to writing Java plugins, which led to building full "
-            "game engines from scratch. That curiosity-driven approach still "
-            "defines how I work.",
+            'programming through game modding as a kid — tweaking Minecraft '
+            'configs led to writing Java plugins, which led to building full '
+            'game engines from scratch. That curiosity-driven approach still '
+            'defines how I work.',
           ),
-          const SizedBox(height: 20),
-          const _TerminalLabel('BEYOND_THE_KEYBOARD'),
-          const SizedBox(height: 14),
-          const _BioText(
-            "Outside of coding I spend most of my time on the football pitch, "
+          SizedBox(height: 20),
+          _TerminalLabel('BEYOND_THE_KEYBOARD'),
+          SizedBox(height: 14),
+          _BioText(
+            'Outside of coding I spend most of my time on the football pitch, '
             "hiking trails, or deep in a tabletop RPG campaign. I'm endlessly "
-            "fascinated by procedural generation — the idea that a handful of "
-            "rules can produce something that feels genuinely alive.",
+            'fascinated by procedural generation — the idea that a handful of '
+            'rules can produce something that feels genuinely alive.',
           ),
-          const SizedBox(height: 20),
-          const _TerminalLabel('CURRENTLY'),
-          const SizedBox(height: 14),
-          const _BioText(
-            "Finishing my M.Sc. at Brown, exploring real-time GI techniques, "
-            "and looking for roles where performance and creativity intersect.",
+          SizedBox(height: 20),
+          _TerminalLabel('CURRENTLY'),
+          SizedBox(height: 14),
+          _BioText(
+            'Finishing my M.Sc. at Brown, exploring real-time GI techniques, '
+            'and looking for roles where performance and creativity intersect.',
           ),
-          const SizedBox(height: 24),
-          const _BlinkingCursor(),
+          SizedBox(height: 24),
+          _BlinkingCursor(),
         ],
       ),
     );
@@ -679,13 +716,33 @@ class _StatsPanel extends StatelessWidget {
   const _StatsPanel();
 
   static const _stats = [
-    _StatEntry(icon: Icons.location_on_outlined,     label: 'LOCATION',          value: 'Providence, RI'),
-    _StatEntry(icon: Icons.sports_soccer_outlined,   label: 'SPORT',             value: 'Football'),
-    _StatEntry(icon: Icons.videogame_asset_outlined, label: 'CURRENTLY PLAYING', value: 'Elden Ring'),
-    _StatEntry(icon: Icons.menu_book_outlined,       label: 'READING',           value: 'SICP'),
-    _StatEntry(icon: Icons.psychology_outlined,      label: 'OBSESSION',         value: 'Proc. generation'),
-    _StatEntry(icon: Icons.coffee_outlined,          label: 'FUEL',              value: 'Espresso'),
-    _StatEntry(icon: Icons.music_note_outlined,      label: 'SOUNDTRACK',        value: 'Math rock'),
+    _StatEntry(
+      icon: Icons.location_on_outlined,
+      label: 'LOCATION',
+      value: 'Providence, RI',
+    ),
+    _StatEntry(
+      icon: Icons.sports_soccer_outlined,
+      label: 'SPORT',
+      value: 'Football',
+    ),
+    _StatEntry(
+      icon: Icons.videogame_asset_outlined,
+      label: 'CURRENTLY PLAYING',
+      value: 'Elden Ring',
+    ),
+    _StatEntry(icon: Icons.menu_book_outlined, label: 'READING', value: 'SICP'),
+    _StatEntry(
+      icon: Icons.psychology_outlined,
+      label: 'OBSESSION',
+      value: 'Proc. generation',
+    ),
+    _StatEntry(icon: Icons.coffee_outlined, label: 'FUEL', value: 'Espresso'),
+    _StatEntry(
+      icon: Icons.music_note_outlined,
+      label: 'SOUNDTRACK',
+      value: 'Math rock',
+    ),
   ];
 
   @override
@@ -707,11 +764,17 @@ class _StatEntry {
   final IconData icon;
   final String label;
   final String value;
-  const _StatEntry({required this.icon, required this.label, required this.value});
+
+  const _StatEntry({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 }
 
 class _StatRow extends StatelessWidget {
   final _StatEntry entry;
+
   const _StatRow({required this.entry});
 
   @override
@@ -759,6 +822,7 @@ class _StatRow extends StatelessWidget {
 
 class _TerminalLabel extends StatelessWidget {
   final String text;
+
   const _TerminalLabel(this.text);
 
   @override
@@ -789,17 +853,18 @@ class _TerminalLabel extends StatelessWidget {
 
 class _BioText extends StatelessWidget {
   final String text;
+
   const _BioText(this.text);
 
   @override
   Widget build(BuildContext context) => Text(
-        text,
-        style: GoogleFonts.montserrat(
-          fontSize: 13.5,
-          color: ThemeColors.textSecondary,
-          height: 1.75,
-        ),
-      );
+    text,
+    style: GoogleFonts.montserrat(
+      fontSize: 13.5,
+      color: ThemeColors.textSecondary,
+      height: 1.75,
+    ),
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -834,13 +899,13 @@ class _BlinkingCursorState extends State<_BlinkingCursor>
 
   @override
   Widget build(BuildContext context) => FadeTransition(
-        opacity: _ctrl,
-        child: Text(
-          '▋',
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 14,
-            color: const Color(0xFF69FF47),
-          ),
-        ),
-      );
+    opacity: _ctrl,
+    child: Text(
+      '▋',
+      style: GoogleFonts.jetBrainsMono(
+        fontSize: 14,
+        color: const Color(0xFF69FF47),
+      ),
+    ),
+  );
 }
