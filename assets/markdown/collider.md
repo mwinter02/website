@@ -53,7 +53,7 @@ these in real time and immediately see how it affects the collider quality.
 <!-- Image: Static mesh UI -->
 > #### Static mesh decomposition UI
 > 
-> ![static_ui.png](/assets/images/projects/collider/static_ui.png)
+> ![static_ui.png](/assets/assets/images/projects/collider/static_ui.png)
 > 
 
 The visualization was really important here. I added wireframe overlay modes so you can see both the original mesh and
@@ -84,7 +84,7 @@ just the torso).
 
 > #### Skeletal mesh decomposition UI
 > 
-> ![skeletal_ui.png](/assets/images/projects/collider/skeletal_ui.png)
+> ![skeletal_ui.png](/assets/assets/images/projects/collider/skeletal_ui.png)
 > 
 
 For each selected bone, the algorithm creates one convex hull from all the vertices weighted to it. I also added an AABB
@@ -99,7 +99,7 @@ attached to their bones during animation—took a lot of debugging.
 
 > #### Rigged colliders with animation
 > 
-> ![backflip.gif](/assets/images/projects/collider/backflip.gif)
+> ![backflip.gif](/assets/assets/images/projects/collider/backflip.gif)
 > 
 
 ### Export System
@@ -118,7 +118,7 @@ seamlessly in any game engine.
 
 > #### Exported colliders
 > 
-> ![export.png](/assets/images/projects/collider/export.png)
+> ![export.png](/assets/assets/images/projects/collider/export.png)
 > 
 
 ### Team Contributions

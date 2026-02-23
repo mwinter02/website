@@ -18,9 +18,9 @@ The idea was to give users a canvas to paint with biomes — water, mountains, g
 generate a fully realised 3D terrain from whatever they drew. My work focused on the terrain generation itself: taking
 the painted canvas and turning it into a height and noise map that drove the 3D output.
 
-![finishedDrawing.png](/assets/images/projects/terrain/finishedDrawing.png)
+![finishedDrawing.png](/assets/assets/images/projects/terrain/finishedDrawing.png)
 
-![topIsland.png](/assets/images/projects/terrain/topIsland.png)
+![topIsland.png](/assets/assets/images/projects/terrain/topIsland.png)
 
 The project builds on concepts covered throughout the CS1230 course, combining rasterisation, terrain generation, and
 shader work into a single interactive tool.
@@ -48,7 +48,7 @@ Gordan handled the toon shader and user interface. The toon shader gives the ter
 inspired by traditional cartoon animation, toggled at any time with the T key.
 Also thank you to Gordan for creating the awesome demo video.
 
-![toonIsland.png](/assets/images/projects/terrain/toonIsland.png)
+![toonIsland.png](/assets/assets/images/projects/terrain/toonIsland.png)
 
 
 

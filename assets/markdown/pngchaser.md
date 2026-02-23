@@ -168,7 +168,7 @@ BVH for static objects with hierarchical grids for dynamic objects really works.
 
 > #### 2500 tightly packed spheres with stable 100+ fps
 >
-> ![explode.gif](/assets/images/projects/pngchaser/explode.gif)
+> ![explode.gif](/assets/assets/images/projects/pngchaser/explode.gif)
 >
 
 Debugging hierarchical grids in 3D was surprisingly hard. 1D and 2D examples made sense, but extending it to three
@@ -223,7 +223,7 @@ generates a completely different layout that captures that liminal, unsettling b
 
 > #### Chaser approaching player
 >
->![chaser_lurking.png](/assets/images/projects/pngchaser/chaser_lurking.png)
+>![chaser_lurking.png](/assets/assets/images/projects/pngchaser/chaser_lurking.png)
 >
 
 The audio system uses RAudio for immersive 3D sound. Stereo panning shifts audio between left and right channels based
