@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
+import '../theme/text_theme.dart';
 import 'video_player.dart';
 
 class MarkdownRenderer extends StatelessWidget {
@@ -59,7 +60,12 @@ class MarkdownImplementation extends StatelessWidget {
           color: Colors.grey.shade900,
           borderRadius: BorderRadius.circular(4),
         ),
-        code: const TextStyle(fontFamily: 'JetBrainsMono'),
+        code: AppTextTheme.monoCode,
+        h1: AppTextTheme.display.copyWith(fontSize: 48),
+        h2: AppTextTheme.displayHeadline.copyWith(fontSize: 36),
+        h3: AppTextTheme.labelSection.copyWith(fontSize: 28),
+        h4: AppTextTheme.labelSection.copyWith(fontSize: 24),
+        p: AppTextTheme.body,
       ),
     );
   }

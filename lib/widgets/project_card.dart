@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../main.dart';
 import '../router.dart';
+import '../theme/text_theme.dart';
 import 'dynamic_widget.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -146,10 +146,8 @@ class _HoverOverlay extends StatelessWidget {
           // Title
           Text(
             title,
-            style: GoogleFonts.michroma(
+            style: AppTextTheme.displayName.copyWith(
               fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
               letterSpacing: 0.8,
             ),
           ),
@@ -160,11 +158,7 @@ class _HoverOverlay extends StatelessWidget {
               description,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.montserrat(
-                fontSize: 12,
-                color: Colors.white70,
-                height: 1.4,
-              ),
+              style: AppTextTheme.bodySmall.copyWith(fontSize: 12),
             ),
           ],
           // "View project" affordance
@@ -173,11 +167,10 @@ class _HoverOverlay extends StatelessWidget {
             children: [
               Text(
                 'VIEW PROJECT',
-                style: GoogleFonts.electrolize(
+                style: AppTextTheme.labelNav.copyWith(
                   fontSize: 11,
-                  color: Colors.deepPurpleAccent.shade100,
+                  color: AppTextColors.accent,
                   letterSpacing: 2,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(width: 6),
@@ -270,14 +263,14 @@ class _TagChipState extends State<_TagChip> {
           ),
           child: Text(
             widget.label,
-            style: GoogleFonts.electrolize(
+            style: AppTextTheme.labelField.copyWith(
               fontSize: 11,
               letterSpacing: 1.2,
               color: active
-                  ? Colors.white
-                  : hovered
-                      ? Colors.white.withValues(alpha: 0.85)
-                      : Colors.white60,
+                  ? AppTextColors.bright
+                  : _hovered
+                      ? AppTextColors.primary
+                      : AppTextColors.secondary,
               fontWeight: active ? FontWeight.w600 : FontWeight.normal,
             ),
           ),

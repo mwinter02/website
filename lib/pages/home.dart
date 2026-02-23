@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../router.dart';
+import '../theme/text_theme.dart';
 import '../theme/theme.dart';
 import '../widgets/about_section.dart';
 import '../widgets/dynamic_widget.dart';
@@ -157,10 +157,10 @@ class _ViewAllButtonState extends State<_ViewAllButton> {
                 children: [
                   Text(
                     'VIEW ALL PROJECTS',
-                    style: GoogleFonts.electrolize(
+                    style: AppTextTheme.labelNav.copyWith(
                       fontSize: 13,
                       letterSpacing: 2.5,
-                      color: _hovered ? Colors.white : Colors.white60,
+                      color: _hovered ? AppTextColors.bright : AppTextColors.secondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dynamic_widget.dart';
-import 'dart:math' show pi;
-
 import '../theme/custom_icons.dart';
+import '../theme/text_theme.dart';
+import 'dynamic_widget.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Data model for a language badge
@@ -218,11 +218,8 @@ class _MobileCard extends StatelessWidget {
                     Text(
                       name,
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.michroma(
+                      style: AppTextTheme.displayName.copyWith(
                         fontSize: 20 * s,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.4,
                       ),
                     ),
                     SizedBox(height: 6 * s),
@@ -240,10 +237,8 @@ class _MobileCard extends StatelessWidget {
                       ),
                       child: Text(
                         title,
-                        style: GoogleFonts.electrolize(
+                        style: AppTextTheme.displaySubtitle.copyWith(
                           fontSize: 12 * s,
-                          color: Colors.deepPurpleAccent.shade100,
-                          letterSpacing: 1.2,
                         ),
                       ),
                     ),
@@ -343,11 +338,7 @@ class _ScaledDetailRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: GoogleFonts.montserrat(
-              fontSize: 13 * scale,
-              color: Colors.white70,
-              height: 1.5,
-            ),
+            style: AppTextTheme.bodySmall.copyWith(fontSize: 13 * scale),
           ),
         ),
       ],
@@ -691,11 +682,7 @@ class _TrainerCardBack extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(28, 14, 28, 8),
             child: Text(
               _bio,
-              style: GoogleFonts.montserrat(
-                fontSize: 12.5,
-                color: Colors.white70,
-                height: 1.65,
-              ),
+              style: AppTextTheme.body.copyWith(fontSize: 12.5),
             ),
           ),
         ),
@@ -728,11 +715,7 @@ class _TrainerCardBack extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(20 * s, 14 * s, 20 * s, 0),
               child: Text(
                 _bio,
-                style: GoogleFonts.montserrat(
-                  fontSize: 13 * s,
-                  color: Colors.white70,
-                  height: 1.65,
-                ),
+                style: AppTextTheme.body.copyWith(fontSize: 13 * s),
               ),
             ),
             SizedBox(height: 16 * s),
@@ -764,19 +747,11 @@ class _TrainerCardBack extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: GoogleFonts.michroma(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 1.4,
-                  ),
+                  style: AppTextTheme.displayName,
                 ),
                 const SizedBox(height: 6),
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 3,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.deepPurpleAccent.withValues(alpha: 0.25),
                     borderRadius: BorderRadius.circular(4),
@@ -786,11 +761,7 @@ class _TrainerCardBack extends StatelessWidget {
                   ),
                   child: Text(
                     title,
-                    style: GoogleFonts.electrolize(
-                      fontSize: 11,
-                      color: Colors.deepPurpleAccent.shade100,
-                      letterSpacing: 1.2,
-                    ),
+                    style: AppTextTheme.displaySubtitle,
                   ),
                 ),
               ],
@@ -817,11 +788,7 @@ class _TapToFlip extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           'TAP TO FLIP',
-          style: GoogleFonts.electrolize(
-            fontSize: 10,
-            color: Colors.white24,
-            letterSpacing: 1.5,
-          ),
+          style: AppTextTheme.labelField.copyWith(color: AppTextColors.subtle),
         ),
       ],
     );
@@ -847,20 +814,12 @@ class _StatBadge extends StatelessWidget {
       children: [
         Text(
           item.value,
-          style: GoogleFonts.michroma(
-            fontSize: 22,
-            color: Colors.deepPurpleAccent.shade100,
-            fontWeight: FontWeight.bold,
-          ),
+          style: AppTextTheme.displayName.copyWith(fontSize: 22),
         ),
         const SizedBox(height: 3),
         Text(
           item.label,
-          style: GoogleFonts.electrolize(
-            fontSize: 10,
-            color: Colors.white38,
-            letterSpacing: 1.8,
-          ),
+          style: AppTextTheme.labelField,
         ),
       ],
     );
@@ -978,15 +937,10 @@ class _ProfileDetails extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Name — Michroma to match the site header font
+        // Name
         Text(
           name,
-          style: GoogleFonts.michroma(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1.4,
-          ),
+          style: AppTextTheme.displayName.copyWith(fontSize: 26),
         ),
         const SizedBox(height: 4),
         // Title chip
@@ -1001,11 +955,7 @@ class _ProfileDetails extends StatelessWidget {
           ),
           child: Text(
             title,
-            style: GoogleFonts.electrolize(
-              fontSize: 13,
-              color: Colors.deepPurpleAccent.shade100,
-              letterSpacing: 1.2,
-            ),
+            style: AppTextTheme.displaySubtitle.copyWith(fontSize: 13),
           ),
         ),
         const SizedBox(height: 14),
@@ -1037,11 +987,7 @@ class _DetailRow extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: GoogleFonts.montserrat(
-              fontSize: 13.5,
-              color: Colors.white70,
-              height: 1.5,
-            ),
+            style: AppTextTheme.bodySmall.copyWith(fontSize: 13.5),
           ),
         ),
       ],
@@ -1081,10 +1027,10 @@ class _CardDivider extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               label,
-              style: GoogleFonts.electrolize(
+              style: AppTextTheme.labelField.copyWith(
                 fontSize: 11,
+                color: AppTextColors.accent,
                 letterSpacing: 2.5,
-                color: Colors.deepPurpleAccent.shade100,
               ),
             ),
           ),
@@ -1146,7 +1092,6 @@ class LanguageBadge extends StatefulWidget {
 
 class _LanguageBadgeState extends State<LanguageBadge> {
   bool _hovered = false;
-  bool _mobile = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1215,10 +1160,9 @@ class _LanguageBadgeState extends State<LanguageBadge> {
               child: Text(
                 widget.data.label,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.electrolize(
+                style: AppTextTheme.labelField.copyWith(
                   fontSize: 11 * s,
-                  color: _hovered ? Colors.white : Colors.white60,
-                  letterSpacing: 0.8,
+                  color: _hovered ? AppTextColors.bright : AppTextColors.secondary,
                   fontWeight: FontWeight.w600,
                 ),
               ),

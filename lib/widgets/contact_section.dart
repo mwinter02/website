@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../links.dart';
-import '../theme/theme.dart';
+import '../theme/text_theme.dart';
 import 'site_widgets.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -101,20 +100,11 @@ class _HeaderBar extends StatelessWidget {
             children: [
               Text(
                 '> ',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 13,
-                  color: const Color(0xFF69FF47),
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextTheme.labelPrompt,
               ),
               Text(
                 'CONTACT_DETAILS',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 13,
-                  color: ThemeColors.appBarAccent,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: AppTextTheme.labelSection,
               ),
             ],
           ),
@@ -132,17 +122,15 @@ class _HeaderBar extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               border: Border.all(
-                color: const Color(0xFFFF3B3B).withValues(alpha: 0.6),
+                color: AppTextColors.danger.withValues(alpha: 0.6),
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(3),
             ),
             child: Text(
               'CLASSIFIED',
-              style: GoogleFonts.jetBrainsMono(
-                fontSize: 9,
-                color: const Color(0xFFFF3B3B).withValues(alpha: 0.8),
-                letterSpacing: 2.5,
+              style: AppTextTheme.labelPill.copyWith(
+                color: AppTextColors.danger.withValues(alpha: 0.8),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -160,14 +148,14 @@ class _HeaderBar extends StatelessWidget {
 class _WideChannels extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Left stamp column
-        const _SubjectStamp(),
-        const SizedBox(width: 32),
+        _SubjectStamp(),
+        SizedBox(width: 32),
         // Right channels
-        const Expanded(child: _ChannelList()),
+        Expanded(child: _ChannelList()),
       ],
     );
   }
@@ -201,56 +189,36 @@ class _SubjectStamp extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'SUBJECT',
-            style: GoogleFonts.electrolize(
-              fontSize: 9,
-              color: Colors.white24,
-              letterSpacing: 3,
-            ),
-          ),
+          Text('SUBJECT', style: AppTextTheme.labelField),
           const SizedBox(height: 6),
-          Text(
-            'Marcus Winter',
-            style: GoogleFonts.michroma(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1,
-            ),
-          ),
+          Text('Marcus Winter', style: AppTextTheme.displayName),
           const SizedBox(height: 4),
           Text(
             'Software Engineer',
-            style: GoogleFonts.electrolize(
-              fontSize: 11,
-              color: Colors.white38,
-              letterSpacing: 1.2,
-            ),
+            style: AppTextTheme.displaySubtitle,
           ),
           const SizedBox(height: 16),
           // Availability stamp — rotated, semi-transparent
-         Container(
-           alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xFF00E676).withValues(alpha: 0.7),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(3),
+          Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppTextColors.terminal.withValues(alpha: 0.7),
+                width: 2,
               ),
-              child: Text(
-                'AVAILABLE',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 13,
-                  color: const Color(0xFF00E676).withValues(alpha: 0.7),
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 3,
-                ),
+              borderRadius: BorderRadius.circular(3),
+            ),
+            child: Text(
+              'AVAILABLE',
+              style: AppTextTheme.labelPill.copyWith(
+                fontSize: 13,
+                color: AppTextColors.terminal.withValues(alpha: 0.7),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 3,
               ),
             ),
-
+          ),
         ],
       ),
     );
@@ -314,7 +282,7 @@ class _EmailChannelState extends State<_EmailChannel> {
         child: _ChannelRow(
           icon: Icons.mail_outline,
           label: 'EMAIL',
-          accentColor: ThemeColors.appBarAccent,
+          accentColor: AppTextColors.accent,
           valueWidget: Row(
             children: [
               // Redacted ↔ revealed text
@@ -325,12 +293,10 @@ class _EmailChannelState extends State<_EmailChannel> {
                     _emailDisplay,
                     key: ValueKey(_hovered || _copied),
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.jetBrainsMono(
-                      fontSize: 13,
+                    style: AppTextTheme.monoData.copyWith(
                       color: _hovered
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.45),
-                      letterSpacing: 0.5,
+                          ? AppTextColors.bright
+                          : AppTextColors.secondary,
                     ),
                   ),
                 ),
@@ -345,30 +311,28 @@ class _EmailChannelState extends State<_EmailChannel> {
                 ),
                 decoration: BoxDecoration(
                   color: _copied
-                      ? const Color(0xFF00E676).withValues(alpha: 0.15)
+                      ? AppTextColors.terminal.withValues(alpha: 0.15)
                       : _hovered
-                          ? ThemeColors.appBarAccent.withValues(alpha: 0.15)
+                          ? AppTextColors.accent.withValues(alpha: 0.15)
                           : Colors.transparent,
                   borderRadius: BorderRadius.circular(3),
                   border: Border.all(
                     color: _copied
-                        ? const Color(0xFF00E676).withValues(alpha: 0.6)
+                        ? AppTextColors.terminal.withValues(alpha: 0.6)
                         : _hovered
-                            ? ThemeColors.appBarAccent.withValues(alpha: 0.6)
+                            ? AppTextColors.accent.withValues(alpha: 0.6)
                             : Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
                 child: Text(
                   _copied ? 'COPIED //' : 'COPY',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 9,
-                    letterSpacing: 1.5,
+                  style: AppTextTheme.labelPill.copyWith(
                     color: _copied
-                        ? const Color(0xFF00E676)
+                        ? AppTextColors.terminal
                         : _hovered
-                            ? ThemeColors.appBarAccent
-                            : Colors.white24,
+                            ? AppTextColors.accent
+                            : AppTextColors.subtle,
                   ),
                 ),
               ),
@@ -405,17 +369,15 @@ class _LinkedInChannelState extends State<_LinkedInChannel> {
         child: _ChannelRow(
           icon: FontAwesomeIcons.linkedin,
           label: 'LINKEDIN',
-          accentColor: const Color(0xFF0A66C2),
+          accentColor: AppTextColors.linkedIn,
           valueWidget: Row(
             children: [
               Flexible(
                 child: Text(
                   _linkedInHandle,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 13,
-                    color: _hovered ? Colors.white : Colors.white.withValues(alpha: 0.55),
-                    letterSpacing: 0.5,
+                  style: AppTextTheme.monoData.copyWith(
+                    color: _hovered ? AppTextColors.bright : AppTextColors.secondary,
                   ),
                 ),
               ),
@@ -425,24 +387,20 @@ class _LinkedInChannelState extends State<_LinkedInChannel> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: _hovered
-                      ? const Color(0xFF0A66C2).withValues(alpha: 0.15)
+                      ? AppTextColors.linkedIn.withValues(alpha: 0.15)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(3),
                   border: Border.all(
                     color: _hovered
-                        ? const Color(0xFF0A66C2).withValues(alpha: 0.6)
+                        ? AppTextColors.linkedIn.withValues(alpha: 0.6)
                         : Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
                 child: Text(
                   'CONNECT',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 9,
-                    letterSpacing: 1.5,
-                    color: _hovered
-                        ? const Color(0xFF0A66C2)
-                        : Colors.white24,
+                  style: AppTextTheme.labelPill.copyWith(
+                    color: _hovered ? AppTextColors.linkedIn : AppTextColors.subtle,
                   ),
                 ),
               ),
@@ -479,17 +437,15 @@ class _CvChannelState extends State<_CvChannel> {
         child: _ChannelRow(
           icon: Icons.file_download_outlined,
           label: 'RESUME',
-          accentColor: const Color(0xFFFFD600),
+          accentColor: AppTextColors.amber,
           valueWidget: Row(
             children: [
               Flexible(
                 child: Text(
                   'resume_marcus_winter.pdf',
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 13,
-                    color: _hovered ? Colors.white : Colors.white.withValues(alpha: 0.55),
-                    letterSpacing: 0.5,
+                  style: AppTextTheme.monoData.copyWith(
+                    color: _hovered ? AppTextColors.bright : AppTextColors.secondary,
                   ),
                 ),
               ),
@@ -499,24 +455,20 @@ class _CvChannelState extends State<_CvChannel> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
                   color: _hovered
-                      ? const Color(0xFFFFD600).withValues(alpha: 0.12)
+                      ? AppTextColors.amber.withValues(alpha: 0.12)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(3),
                   border: Border.all(
                     color: _hovered
-                        ? const Color(0xFFFFD600).withValues(alpha: 0.5)
+                        ? AppTextColors.amber.withValues(alpha: 0.5)
                         : Colors.white.withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
                 child: Text(
                   'DOWNLOAD',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 9,
-                    letterSpacing: 1.5,
-                    color: _hovered
-                        ? const Color(0xFFFFD600)
-                        : Colors.white24,
+                  style: AppTextTheme.labelPill.copyWith(
+                    color: _hovered ? AppTextColors.amber : AppTextColors.subtle,
                   ),
                 ),
               ),
@@ -566,14 +518,7 @@ class _ChannelRow extends StatelessWidget {
         child: Icon(icon, size: 15, color: accentColor.withValues(alpha: 0.8)),
       );
 
-      final labelText = Text(
-        label,
-        style: GoogleFonts.electrolize(
-          fontSize: 9,
-          color: Colors.white30,
-          letterSpacing: 2.5,
-        ),
-      );
+      final labelText = Text(label, style: AppTextTheme.labelField);
 
       if (narrow) {
         return Column(
@@ -620,41 +565,18 @@ class _ClearanceFooter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: LayoutBuilder(builder: (context, constraints) {
-        final narrow = constraints.maxWidth < 480;
         final status = Text(
           'STATUS: AVAILABLE FOR HIRE',
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 9,
-            color: const Color(0xFF00E676).withValues(alpha: 0.4),
-            letterSpacing: 2,
+          style: AppTextTheme.labelMeta.copyWith(
+            color: AppTextColors.terminal.withValues(alpha: 0.4),
           ),
         );
         final fileRef = Text(
           'FILE REF: MW-2026',
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 9,
-            color: Colors.white12,
-            letterSpacing: 2,
-          ),
+          style: AppTextTheme.labelMeta,
         );
-
-        if (narrow) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              status,
-              const Spacer(),
-              fileRef,
-            ],
-          );
-        }
-
         return Row(
-          children: [
-            status,
-            const Spacer(),
-            fileRef,
-          ],
+          children: [status, const Spacer(), fileRef],
         );
       }),
     );

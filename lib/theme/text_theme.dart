@@ -206,19 +206,19 @@ class AppTextTheme {
 
   static final TextTheme theme = TextTheme(
     // Display → Oxanium
-    displayLarge:   display.copyWith(fontSize: 48),
-    displayMedium:  display.copyWith(fontSize: 36),
-    displaySmall:   display.copyWith(fontSize: 28),
+    displayLarge:   display.copyWith(fontSize: 56),
+    displayMedium:  display.copyWith(fontSize: 48),
+    displaySmall:   display.copyWith(fontSize: 42),
 
     // Headline → Oxanium
-    headlineLarge:  displayHeadline.copyWith(fontSize: 28),
-    headlineMedium: displayHeadline.copyWith(fontSize: 22),
-    headlineSmall:  displayHeadline.copyWith(fontSize: 18),
+    headlineLarge:  displayHeadline.copyWith(fontSize: 40),
+    headlineMedium: displayHeadline.copyWith(fontSize: 36),
+    headlineSmall:  displayHeadline.copyWith(fontSize: 32),
 
     // Title → JetBrains Mono (UI labels)
-    titleLarge:     labelSection.copyWith(fontSize: 16),
-    titleMedium:    labelSection.copyWith(fontSize: 14),
-    titleSmall:     labelField.copyWith(fontSize: 11),
+    titleLarge:     labelSection.copyWith(fontSize: 30),
+    titleMedium:    labelSection.copyWith(fontSize: 26),
+    titleSmall:     labelField.copyWith(fontSize: 22),
 
     // Body → Inter
     bodyLarge:      body.copyWith(fontSize: 17),

@@ -618,8 +618,10 @@ class Separator extends StatelessWidget {
   const Separator({super.key});
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) =>
+      Container(
         height: 1,
         margin: const EdgeInsets.symmetric(vertical: 12),
         color: Colors.white.withValues(alpha: 0.05),
       );
+}

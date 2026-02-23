@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../models/project.dart';
+import '../theme/text_theme.dart';
 import '../theme/theme.dart';
 import 'project_card.dart';
 
@@ -110,20 +110,19 @@ class _FeaturedProjectsHeader extends StatelessWidget {
               ).createShader(bounds),
               child: Text(
                 'FEATURED PROJECTS',
-                style: GoogleFonts.michroma(
+                style: AppTextTheme.displayHeadline.copyWith(
                   fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
                   letterSpacing: 5,
+                  color: AppTextColors.bright,
                 ),
               ),
             ),
             const SizedBox(height: 4),
             Text(
               'A selection of recent work',
-              style: GoogleFonts.electrolize(
+              style: AppTextTheme.labelField.copyWith(
                 fontSize: 12,
-                color: Colors.white38,
+                color: AppTextColors.subtle,
                 letterSpacing: 1.5,
               ),
             ),
@@ -209,11 +208,10 @@ class GalleryHeader extends StatelessWidget {
       ).createShader(bounds),
       child: Text(
         'PROJECTS',
-        style: GoogleFonts.michroma(
+        style: AppTextTheme.displayHeadline.copyWith(
           fontSize: fontSize,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
           letterSpacing: 6,
+          color: AppTextColors.bright,
         ),
       ),
     );
@@ -376,8 +374,7 @@ class _ProjectGridState extends State<ProjectGrid>
           padding: const EdgeInsets.all(48),
           child: Text(
             'No projects in this category yet.',
-            style: GoogleFonts.electrolize(
-              color: Colors.white38,
+            style: AppTextTheme.bodySmall.copyWith(
               fontSize: 14,
               letterSpacing: 1.5,
             ),

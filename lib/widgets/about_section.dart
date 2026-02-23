@@ -1,5 +1,5 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import '../theme/text_theme.dart';
 import '../theme/theme.dart';
 import 'contact_section.dart';
 import 'dynamic_widget.dart';
@@ -81,20 +81,19 @@ class _AboutHeader extends StatelessWidget {
               ).createShader(bounds),
               child: Text(
                 'ABOUT',
-                style: GoogleFonts.michroma(
+                style: AppTextTheme.displayHeadline.copyWith(
                   fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
                   letterSpacing: 5,
+                  color: AppTextColors.bright,
                 ),
               ),
             ),
             const SizedBox(height: 4),
             Text(
               'The person behind the keyboard',
-              style: GoogleFonts.electrolize(
+              style: AppTextTheme.labelField.copyWith(
                 fontSize: 12,
-                color: Colors.white38,
+                color: AppTextColors.subtle,
                 letterSpacing: 1.5,
               ),
             ),
@@ -492,9 +491,8 @@ class _PhotoPanelState extends State<_PhotoPanel>
                 const SizedBox(width: 5),
                 Text(
                   'TAP TO CYCLE',
-                  style: GoogleFonts.electrolize(
-                    fontSize: 9,
-                    color: Colors.white24,
+                  style: AppTextTheme.labelField.copyWith(
+                    color: AppTextColors.subtle,
                     letterSpacing: 2,
                   ),
                 ),
@@ -622,12 +620,7 @@ class _Caption extends StatelessWidget {
         children: [
           Text(
             entry.caption,
-            style: GoogleFonts.michroma(
-              fontSize: 13,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
+            style: AppTextTheme.displayName.copyWith(fontSize: 13),
           ),
           const SizedBox(height: 4),
           Row(
@@ -638,17 +631,13 @@ class _Caption extends StatelessWidget {
                 height: 6,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFF00E676),
+                  color: AppTextColors.terminal,
                 ),
               ),
               const SizedBox(width: 6),
               Text(
                 entry.sub,
-                style: GoogleFonts.electrolize(
-                  fontSize: 11,
-                  color: Colors.white60,
-                  letterSpacing: 1.2,
-                ),
+                style: AppTextTheme.bodySmall.copyWith(fontSize: 11),
               ),
             ],
           ),
@@ -808,23 +797,9 @@ class _StatRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.label,
-                  style: GoogleFonts.electrolize(
-                    fontSize: 9,
-                    color: Colors.white30,
-                    letterSpacing: 2,
-                  ),
-                ),
+                Text(entry.label, style: AppTextTheme.labelField),
                 const SizedBox(height: 1),
-                Text(
-                  entry.value,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 13,
-                    color: Colors.white70,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Text(entry.value, style: AppTextTheme.bodySmall),
               ],
             ),
           ),
@@ -847,23 +822,8 @@ class _TerminalLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          '> ',
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 12,
-            color: const Color(0xFF69FF47),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          text,
-          style: GoogleFonts.jetBrainsMono(
-            fontSize: 12,
-            color: ThemeColors.appBarAccent,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text('> ', style: AppTextTheme.labelPrompt),
+        Text(text,  style: AppTextTheme.labelSection),
       ],
     );
   }
@@ -875,14 +835,7 @@ class _BioText extends StatelessWidget {
   const _BioText(this.text);
 
   @override
-  Widget build(BuildContext context) => Text(
-    text,
-    style: GoogleFonts.montserrat(
-      fontSize: 13.5,
-      color: ThemeColors.textSecondary,
-      height: 1.75,
-    ),
-  );
+  Widget build(BuildContext context) => Text(text, style: AppTextTheme.body);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -918,12 +871,6 @@ class _BlinkingCursorState extends State<_BlinkingCursor>
   @override
   Widget build(BuildContext context) => FadeTransition(
     opacity: _ctrl,
-    child: Text(
-      '▋',
-      style: GoogleFonts.jetBrainsMono(
-        fontSize: 14,
-        color: const Color(0xFF69FF47),
-      ),
-    ),
+    child: Text('▋', style: AppTextTheme.labelPrompt.copyWith(fontSize: 14)),
   );
 }
