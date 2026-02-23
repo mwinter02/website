@@ -1,119 +1,82 @@
-This project was completed as a final project for CSCI1470: Deep Learning in Spring 2025 at Brown University. Urbanize explores how machine learning models internalize and reproduce human perceptions of urban environments, such as perceived wealth and liveliness, by training conditional generative models on large-scale crowdsourced data.
+# Urbanize
 
-Urban environments
+## Brief
 
-Background
-Human perception of urban spaces—how safe, wealthy, lively, or beautiful a place appears—plays a critical role in city planning, social research, and public policy. Prior work such as Deep Learning the City (Dubey et al., 2016) demonstrated that these perceptions can be quantified at scale using pairwise comparisons of Google Street View images.
+A final project for Brown University's CSCI 147
+0 - "Deep Learning" course in Spring 2025. Urbanize explores whether
+conditional generative models can learn and reproduce human perceptions of urban environments — such as perceived
+wealth and liveliness — by training on large-scale crowdsourced Street View data.
 
-However, most existing work focuses on predicting perceptual attributes from images. Far less attention has been given to the inverse problem:
-Can generative models learn and manipulate the visual cues that shape human perception of urban environments?
+- **Project Type**: Team Project
 
-Urbanize addresses this gap by generating urban scenes conditioned on perceptual attributes, providing insight into how models encode socioeconomic and activity-based visual signals.
+- **Skills**: Python, Deep Learning, GANs, Conditional Generation, Remote Training (SLURM/OSCAR)
 
-GitHub Repository:
-https://github.com/jeffreymu1/urbanize
+> Base GAN output samples
+> 
+> ![base_gan.png](/assets/images/projects/urbanize/base_gan.png)
 
-Final Poster (PDF):
-https://drive.google.com/file/d/1nJrO0u9iBa9XqdJKSajn-ckW4DDPxzC0/view?usp=sharing
+## Overview
 
-Algo
+Human perception of urban spaces — how wealthy, lively, safe, or beautiful a place looks — plays a real role in city
+planning and social research. Most prior work focuses on predicting these attributes from images. Urbanize tackles
+the inverse: can a model generate urban scenes that look more or less wealthy, more or less lively, on demand?
 
-Project Goal
-The primary goal of Urbanize was to design a controllable generative framework capable of synthesizing urban scenes that differ systematically in perceived wealth and liveliness, as judged by humans.
+The project uses the Place Pulse 2.0 dataset — 110,688 Google Street View images annotated through pairwise human
+comparisons across perceptual attributes — to train a series of conditional GAN variants.
 
-Specifically, we aimed to:
+My contributions covered model training, the GAN architecture and conditioning pipeline, image generation, and
+running experiments remotely on Brown's OSCAR cluster via SLURM scripts.
 
-Train generative models on large-scale urban imagery
-Condition image generation on human perception labels
-Analyze which visual features emerge when models are optimized for perceptual traits
-Compare conditioned outputs against an unconditioned baseline
-Methodology
-Dataset and Preprocessing
-We used the Place Pulse 2.0 (PP2) dataset, consisting of 110,688 Google Street View images annotated via pairwise comparisons across perceptual attributes.
+### Model Architecture
 
-Preprocessing steps included:
+We implemented and compared four GAN variants, progressing from a baseline to increasingly complex conditioning:
 
-Cropping images from 400×300 → 300×300
-Normalization and augmentation for GAN training
-Aggregation of pairwise judgments into continuous perception scores
-The attributes considered included:
+- **Baseline GAN** — trained on raw images only, no perception labels
+- **Wealth-Conditioned GAN** — conditioned on continuous wealth perception scores
+- **Multi-Attribute GAN** — conditioned on all six perceptual attributes
+- **Wealth + Lively GAN** — jointly conditioned on wealth and liveliness
 
-Wealthy
-Lively
-Safe
-Beautiful
-Boring
-Depressing
-Model Architecture
-We implemented and trained four GAN variants:
+Conditioning was introduced through auxiliary inputs to both the generator and discriminator. All models used a
+standard adversarial training setup with the PP2 dataset split 80/10/10 across train, validation, and test.
 
-Baseline GAN
-Trained solely on raw images, without access to perception labels.
+> Algorithmic overview of the GAN architecture
+> 
+> ![algo.png](/assets/images/projects/urbanize/algo.png)
+> 
 
-Wealth-Conditioned GAN
-Conditioned on continuous “wealth” perception scores.
+### Training on OSCAR
 
-Multi-Attribute GAN
-Conditioned on all available perceptual attributes.
+Training GANs on a dataset this size locally wasn't practical, so I set up and managed remote training jobs on
+Brown's OSCAR computing cluster using SLURM scripts. This involved writing job submission scripts, managing
+checkpointing, and monitoring runs — a good introduction to working with HPC infrastructure.
 
-Wealth + Lively GAN
-Conditioned jointly on wealth and liveliness to study attribute interaction.
+### Results
 
-All models followed a standard adversarial training framework, with conditioning introduced through auxiliary inputs to the generator and discriminator.
+The single-attribute wealth model produced clear and interpretable results — high wealth generations consistently
+showed greenery, modern buildings, and wide streets, while low wealth leaned toward sparse vegetation and older
+architecture.
 
-GAN outputs
 
-Training and Evaluation
-Dataset split: 80% training / 10% validation / 10% testing
-Baseline and single-attribute models trained for 100 epochs
-Wealth + Lively model trained for 150 epochs
-We monitored:
 
-Generator output quality
-Mode collapse
-Discriminator confidence
-Visual consistency across conditioning values
-While quantitative metrics (e.g., FID) were tracked, qualitative visual analysis was the primary evaluation tool, given the subjective nature of perceptual attributes.
+The Wealth + Lively combination was our strongest model. High liveliness correlated with denser building layouts,
+visible cars, and general activity cues. The two attributes seemed to complement each other well, producing
+coherent and visually compelling outputs.
 
-Results and Analysis
-Baseline Model
-Produced realistic urban scenes
-Showed adversarial imbalance, with the discriminator stabilizing around ~10% confidence on generated images
-Exhibited occasional mode collapse
-Wealth-Conditioned Model
-Consistently associated greenery, trees, and modern/tall buildings with high perceived wealth
-Low-wealth generations tended toward sparse vegetation and older architectural styles
-Wealth + Lively Model
-Produced the strongest and most coherent results
-High liveliness correlated with:
-Cars
-Dense building layouts
-Visible activity cues
-Combining wealthy + lively attributes yielded the most visually compelling outputs, suggesting strong synergy between these traits
-Conflicting attribute combinations resulted in degraded or unstable generations, highlighting limitations in disentangling perceptual dimensions.
+> Wealthy Lively GAN results, left to right: low to high wealth. top to bottom: low to high liveliness.
+> 
+> ![wealthy_lively.png](/assets/images/projects/urbanize/wealthy_lively.png)
+> 
+> ![wealthy_lively_2.png](/assets/images/projects/urbanize/wealthy_lively_2.png)
 
-GAN outputs 2
+### Challenges
 
-What Worked and What Didn’t
-Successes:
+Training stability was the biggest difficulty throughout. The discriminator would often gain too much confidence
+early on, throwing off the adversarial balance. Mode collapse was a recurring issue — the generator would settle
+into producing near-identical scenes regardless of the conditioning input.
 
-Demonstrated that GANs can internalize human perceptual biases
-Clear, interpretable visual mappings from labels to features
-Strong results for compatible attribute combinations
-Effective pivot from an infeasible original project direction
-Limitations:
+The multi-attribute model was where this hit hardest. With more than two attributes, the generator struggled to
+meaningfully differentiate outputs. Conflicting attribute combinations — like wealthy but depressing — were
+particularly difficult to model, resulting in degraded or unstable generations. We had the most consistent luck
+keeping it to two complementary attributes.
 
-Adversarial imbalance limited training stability
-Resolution constrained to 300×300
-Dependence on noisy, biased human perception labels
-Difficulty modeling conflicting perceptual traits simultaneously
-Conclusion
-Urbanize shows that conditional generative models can do more than produce realistic images—they can encode and amplify the visual cues humans associate with socioeconomic and activity-based perceptions.
-
-By generating urban scenes along perceptual dimensions such as wealth and liveliness, this project provides insight into how machine learning models reflect—and potentially reinforce—human visual bias. These findings raise important questions about fairness, interpretability, and downstream applications in urban analytics.
-
-Future Work
-Explore fine-grained feature manipulation (e.g., adding trees or façade changes)
-Train higher-resolution or diffusion-based generative models
-Investigate disentanglement of conflicting perceptual traits
-Analyze and mitigate bias embedded in perceptual labels
+<!-- Image: Comparison of conditioned outputs -->

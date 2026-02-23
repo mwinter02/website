@@ -6,9 +6,9 @@ PNG Chaser is a 3D survival horror game heavily inspired by Garry's Mod's "nextb
 with a custom engine in C++ developed from scratch over the course of a 12-week semester, utilizing OpenGL for
 rendering.
 
-### Project Type: Solo
+- **Project Type**: Solo
 
-### Skills: C++, Game Engine development, OpenGL, ECS Architecture, Data-Oriented Design, Collision Detection (GJK/EPA), Pathfinding, Spatial Acceleration Structures
+- **Skills**: C++, Game Engine development, OpenGL, ECS Architecture, Data-Oriented Design, Collision Detection (GJK/EPA), Pathfinding, Spatial Acceleration Structures
 
 
 <video src="pngchaser_demo.mp4"> </video>
