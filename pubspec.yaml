@@ -83,13 +83,13 @@ flutter:
     - assets/markdown/
     - assets/images/projects/
 
-    - assets/images/projects/collider/
-    - assets/images/projects/pngchaser/
-    - assets/images/projects/zombies/
     - assets/images/projects/airobic/
+    - assets/images/projects/collider/
+    - assets/images/projects/pacman/
+    - assets/images/projects/pngchaser/
     - assets/images/projects/terrain/
-
-
+    - assets/images/projects/urbanize/
+    - assets/images/projects/zombies/
 
   fonts:
     - family: CustomIcons

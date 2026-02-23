@@ -6,11 +6,11 @@ Interactive Collider Design is a computational design system for creating collis
 and skeletal 3D assets. The tool was developed as a team project over 6 weeks, providing an intuitive interface for
 decomposing meshes and rigging colliders to animated skeletons.
 
-### Project Type: Team (Marcus Winter, Gordan Milovac, Patrick Ortiz)
+- **Project Type**: Team (Marcus Winter, Gordan Milovac, Patrick Ortiz)
 
-### My Contributions: Static mesh decomposition interface, skeletal mesh decomposition algorithm and interface, collider export system
+- **My Contributions**: Static mesh decomposition interface, skeletal mesh decomposition algorithm and interface, collider export system
 
-### Skills: C++, Mesh Processing, Skinned Meshes, Computational Geometry, Assimp, OpenGL, UI Development
+- **Skills**: C++, Mesh Processing, Skinned Meshes, Computational Geometry, Assimp, OpenGL, UI Development
 
 
 <video src="collider_demo.mp4"> </video>

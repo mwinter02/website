@@ -37,10 +37,10 @@ Currently playing: Pokemon Emerald
 - ~~Profile card badges against border on mobile~~
 - HTML extend safe area beneath search bar on mobile
 - ~~About section beneath projects~~
-- About section content
+- ~~About section content~~
 - Reformat markdown headers, Dev logs title bigger than everything else
 - Skills table on markdown pages
-- Fix images in md
-- Link resume
-- Switch resume order - newest first
+- ~~Fix images in md~~
+- ~~Link resume~~
+- ~~Switch resume order - newest first~~
 - ~~Mobile card display overlay~~
