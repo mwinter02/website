@@ -4,10 +4,12 @@
 Zombies is a 2D top-down zombie survival game built with a custom engine in Java. The engine was developed from scratch
 over the course of the semester, culminating in a 4-week final project to build a game. 
 
-### Project Type: Solo
-### Skills: Java, Game Engine development, Sprite creation, Pathfinding, AI, Physics
+- **Project Type**: Solo
 
-<!-- Video Here -->
+- **Skills**: `Java`, `Game Engine development`, `Sprite creation`, `Pathfinding`, `AI`, `Physics`
+
+
+
 <video src="zombies_demo.mp4"> </video>
 
 ## Overview
@@ -24,8 +26,9 @@ I chose to build a top-down zombie survival game, inspired by COD Zombies and Mi
 The game features navigation mesh based pathfinding, implementing A* and a string-pulling algorithm to create better
 pathfinding AI. The game also features a layered sprite system, allowing for more complex character animations and visual effects.
 
+---
 
-# Development log
+## Development log
 The purpose of the course was to teach engine development, which meant a design emphasis on generic systems that could 
 be reused and extended in future projects. The codebase was separated into an engine package and a game package, with 
 the engine containing all the core systems and the game containing all the game-specific logic and assets.
@@ -94,6 +97,8 @@ the player and zombies have separate layers for the legs, body and head, allowin
 This allowed for more dynamic and visually interesting characters, as well as the ability to easily add new weapons and
 animations in the future. The layered sprite system was paired with an animation controller which handled which frame
 to render based on the entity's current state.
+
+---
 
 ### Conclusion
 Overall, this project was very enjoyable and was an amazing experience to engage in game engine development. 
