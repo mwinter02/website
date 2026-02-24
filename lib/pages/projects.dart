@@ -19,13 +19,13 @@ class Projects {
       '$markdownRootDir$projectName.md';
 
   static final List<Project> all = [
-    zombies,
     pngchaser,
+    zombies,
     collider,
     argo,
-    airobic,
     terrain,
     urbanize,
+    airobic,
     pacman,
   ];
 
