@@ -8,59 +8,25 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Flutter
-        # Use the official flutter-actions/setup-flutter action which accepts 'flutter-version'
-        uses: flutter-actions/setup-flutter@v2
+      - uses: subosito/flutter-action@v2
         with:
-          # Pin the Flutter SDK to the exact version you're using locally
           flutter-version: '3.38.9'
+          channel: stable
 
-      - name: Verify Flutter installation
+      - run: flutter pub get
+
+      - name: Build web
         run: |
-          echo "Checking for flutter on PATH..."
-          if command -v flutter >/dev/null 2>&1; then
-            echo "Flutter found: $(which flutter)"
-            flutter --version || true
-            dart --version || true
-          else
-            echo "Flutter not found after setup action — installing Flutter SDK (stable) from GitHub as a fallback."
-            # Clone the exact Flutter tag to match local dev environment
-            git clone https://github.com/flutter/flutter.git --branch 3.38.9 --depth 1 $HOME/flutter
-            echo "$HOME/flutter/bin" >> $GITHUB_PATH
-            source $GITHUB_PATH || true
-            echo "Added $HOME/flutter/bin to PATH"
-            which flutter || true
-            flutter --version || true
-            echo "Running flutter precache for web..."
-            flutter precache --web || true
-            flutter doctor -v || true
-          fi
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build web (with correct base href)
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-        run: |
-          REPO_NAME=$(echo "$GITHUB_REPOSITORY" | cut -d'/' -f2)
-          # If the repo is a user/organization site (repo name ends with .github.io) use base '/'
-          if [[ "$REPO_NAME" == *.github.io ]]; then
-            BASE_HREF="/"
-          else
-            BASE_HREF="/${REPO_NAME}/"
-          fi
-          echo "Building with base href: $BASE_HREF"
+          REPO_NAME="${{ github.repository }}"
+          REPO_NAME="${REPO_NAME#*/}"
+          [[ "$REPO_NAME" == *.github.io ]] && BASE_HREF="/" || BASE_HREF="/${REPO_NAME}/"
           flutter build web --release --base-href "$BASE_HREF"
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
           publish_branch: gh-pages
-          # optional: set keep_files: false to remove old files
           keep_files: false
