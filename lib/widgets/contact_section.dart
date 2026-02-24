@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../links.dart';
 import '../theme/text_theme.dart';
+import 'dynamic_widget.dart';
 import 'site_widgets.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -557,11 +558,11 @@ class _ChannelRow extends StatelessWidget {
 // _ClearanceFooter
 // ─────────────────────────────────────────────────────────────────────────────
 
-class _ClearanceFooter extends StatelessWidget {
+class _ClearanceFooter extends DynamicWidget {
   const _ClearanceFooter();
 
   @override
-  Widget build(BuildContext context) {
+  Widget desktopView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: LayoutBuilder(builder: (context, constraints) {
@@ -577,6 +578,28 @@ class _ClearanceFooter extends StatelessWidget {
         );
         return Row(
           children: [status, const Spacer(), fileRef],
+        );
+      }),
+    );
+  }
+
+  @override
+  Widget mobileView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: LayoutBuilder(builder: (context, constraints) {
+        final status = Text(
+          'STATUS: AVAILABLE FOR HIRE',
+          style: AppTextTheme.labelMeta.copyWith(
+            color: AppTextColors.terminal.withValues(alpha: 0.4),
+          ),
+        );
+        final fileRef = Text(
+          'FILE REF: MW-2026',
+          style: AppTextTheme.labelMeta,
+        );
+        return Column(
+          children: [status, fileRef],
         );
       }),
     );
