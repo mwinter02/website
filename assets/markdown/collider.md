@@ -64,7 +64,7 @@ to convex decomposition for cases where performance matters more than accuracy.
 The main challenge was getting CoACD integrated smoothly—making sure the parameters were intuitive and that the
 processing time didn't freeze the UI. For larger meshes, decomposition can take a while, so giving visual feedback
 during the process was important.
->
+
 
 ### Skeletal Mesh Decomposition Algorithm
 
