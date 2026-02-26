@@ -35,8 +35,8 @@ class Projects {
     imagePath: AssetSources.bannerZombies,
     title: 'Zombies',
     description:
-        'A top-down survival shooter with procedural pathfinding and skeletal animation.',
-    tags: const ['Game Engines', 'Java'],
+        'Top-down shooter in a custom built Game engine',
+    tags: const ['Java', 'Game Engines', 'Game Dev'],
     markdownPath: getMdPath('zombies'),
   );
 
@@ -45,8 +45,8 @@ class Projects {
     imagePath: AssetSources.bannerPngChaser,
     title: 'PNG Chaser',
     description:
-        'Real-time image processing tool built around custom rendering pipelines.',
-    tags: ['C++', 'Game Engines', 'OpenGL', 'GLSL'],
+        'Horror survival game in a Custom built Data oriented Game engine',
+    tags: ['C++', 'Game Engines', 'OpenGL', 'GLSL', 'Game Dev'],
     markdownPath: getMdPath('pngchaser'),
   );
 
@@ -56,7 +56,7 @@ class Projects {
     title: 'Interactive Collider Design',
     description:
         'Interactive collider design tool with real-time feedback for game development and 3D modeling.',
-    tags: ['C++', 'Tools'],
+    tags: ['C++', 'Graphics', 'Mesh Processing', 'Game Dev'],
     markdownPath: getMdPath('collider'),
   );
 
@@ -65,7 +65,7 @@ class Projects {
     imagePath: AssetSources.bannerTerrain,
     title: 'Terrain Painter',
     description: 'Procedural terrain generation from 2D paintings.',
-    tags: ['C++', 'GLSL', 'OpenGL'],
+    tags: ['C++', 'Mesh Processing', 'GLSL', 'OpenGL'],
     markdownPath: getMdPath('terrain'),
   );
 
@@ -74,7 +74,7 @@ class Projects {
     imagePath: AssetSources.bannerAirobic,
     title: 'AIRobic',
     description: 'AI powered workout generator.',
-    tags: ['AI', 'React', 'Full Stack'],
+    tags: ['AI', 'React', 'Full Stack', 'Front end', 'Back end'],
     markdownPath: getMdPath('airobic'),
   );
 
@@ -93,7 +93,7 @@ class Projects {
     title: 'ARGO',
     description:
         'Full stack cross-platform recruiting app built with Flutter and Firebase.',
-    tags: ['Flutter', 'Firebase', 'Full Stack'],
+    tags: ['Flutter', 'Firebase', 'Full Stack', 'Front end', 'Back end', 'Dart'],
     markdownPath: getMdPath('argo'),
   );
 
