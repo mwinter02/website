@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../links.dart';
+import '../sources.dart';
 import '../router.dart';
 import '../theme/theme.dart';
 import '../theme/text_theme.dart';
@@ -546,14 +546,14 @@ Widget _emailButton(BuildContext context) => _GlowIconButton(
       icon: Icons.email_outlined,
       iconSize: 40,
       glowColor: const Color(0xFFFF39F5),
-      onPressed: () => launchUrl(emailLaunchUri),
+      onPressed: () => launchUrl(Sources.emailLaunchUri),
     );
 
 Widget _linkedInButton(BuildContext context) => _GlowIconButton(
       icon: FontAwesomeIcons.squareLinkedin,
       iconSize: 36,
       glowColor: const Color(0xFF0E7AE3),
-      onPressed: () => launchUrl(linkedInLaunchUri),
+      onPressed: () => launchUrl(Sources.linkedInLaunchUri),
     );
 
 class _GlowIconButton extends StatefulWidget {

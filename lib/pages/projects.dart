@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/project.dart';
 import '../router.dart';
+import '../sources.dart';
 import '../widgets/project_gallery.dart';
 import '../widgets/site_widgets.dart';
 
@@ -31,7 +32,7 @@ class Projects {
 
   static final zombies = Project(
     route: '$_projectsPath/zombies',
-    imagePath: 'assets/images/banners/zombies.png',
+    imagePath: AssetSources.bannerZombies,
     title: 'Zombies',
     description:
         'A top-down survival shooter with procedural pathfinding and skeletal animation.',
@@ -41,7 +42,7 @@ class Projects {
 
   static final pngchaser = Project(
     route: '$_projectsPath/pngchaser',
-    imagePath: 'assets/images/banners/pngchaser.png',
+    imagePath: AssetSources.bannerPngChaser,
     title: 'PNG Chaser',
     description:
         'Real-time image processing tool built around custom rendering pipelines.',
@@ -51,7 +52,7 @@ class Projects {
 
   static final collider = Project(
     route: '$_projectsPath/collider',
-    imagePath: 'assets/images/banners/collider.png',
+    imagePath: AssetSources.bannerCollider,
     title: 'Interactive Collider Design',
     description:
         'Interactive collider design tool with real-time feedback for game development and 3D modeling.',
@@ -61,7 +62,7 @@ class Projects {
 
   static final terrain = Project(
     route: '$_projectsPath/terrain',
-    imagePath: 'assets/images/banners/terrainpainter.png',
+    imagePath: AssetSources.bannerTerrain,
     title: 'Terrain Painter',
     description: 'Procedural terrain generation from 2D paintings.',
     tags: ['C++', 'GLSL', 'OpenGL'],
@@ -70,7 +71,7 @@ class Projects {
 
   static final airobic = Project(
     route: '$_projectsPath/airobic',
-    imagePath: 'assets/images/banners/airobic.png',
+    imagePath: AssetSources.bannerAirobic,
     title: 'AIRobic',
     description: 'AI powered workout generator.',
     tags: ['AI', 'React', 'Full Stack'],
@@ -79,7 +80,7 @@ class Projects {
 
   static final urbanize = Project(
     route: '$_projectsPath/urbanize',
-    imagePath: 'assets/images/banners/urbanize.png',
+    imagePath: AssetSources.bannerUrbanize,
     title: 'Urbanize',
     description: 'Attribute trained urban scene generation with GANs.',
     tags: ['Python', 'TensorFlow', 'Deep Learning'],
@@ -88,7 +89,7 @@ class Projects {
 
   static final argo = Project(
     route: '$_projectsPath/argo',
-    imagePath: 'assets/images/banners/argo.png',
+    imagePath: AssetSources.bannerArgo,
     title: 'ARGO',
     description:
         'Full stack cross-platform recruiting app built with Flutter and Firebase.',
@@ -98,7 +99,7 @@ class Projects {
 
   static final pacman = Project(
     route: '$_projectsPath/pacman',
-    imagePath: 'assets/images/banners/pacman.png',
+    imagePath: AssetSources.bannerPacman,
     title: 'Pacman',
     description:
         'A faithful recreation of the classic arcade game, built in my first semester of coding.',

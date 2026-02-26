@@ -1,4 +1,5 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../sources.dart';
 import '../theme/text_theme.dart';
 import '../theme/theme.dart';
 import 'contact_section.dart';
@@ -307,31 +308,30 @@ class _PhotoEntry {
 
 // ── Add / remove photos here. Rotations are assigned automatically. ──────────
 const _photos = [
-  // _PhotoEntry(
-  //   assetPath: 'assets/images/profile_picture.png',
-  //   caption: 'Marcus Winter',
-  //   sub: 'Wanted',
-  // ),
   _PhotoEntry(
-    assetPath: 'assets/images/fish.jpg',
+    assetPath: AssetSources.picRow,
+    caption: 'Race day',
+    sub: 'Rhode Island',
+  ),
+  _PhotoEntry(
+    assetPath: AssetSources.picFish,
     caption: 'Spearfishing',
     sub: 'New Zealand',
   ),
   _PhotoEntry(
-    assetPath: 'assets/images/pink.jpg',
+    assetPath: AssetSources.picPink,
     caption: 'Training camp',
     sub: 'Florida',
   ),
   _PhotoEntry(
-    assetPath: 'assets/images/tahoe.jpg',
+    assetPath: AssetSources.picTahoe,
     caption: 'Lake Tahoe',
     sub: 'California',
   ),
-  _PhotoEntry(
-    assetPath: 'assets/images/row.jpg',
-    caption: 'Race day',
-    sub: 'Rhode Island',
-  ),
+  _PhotoEntry(assetPath: AssetSources.picGrad,
+      caption: 'Graduation',
+      sub: 'Rhode Island')
+
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────

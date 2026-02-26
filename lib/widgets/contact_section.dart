@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../links.dart';
+import '../sources.dart';
 import '../theme/text_theme.dart';
 import 'dynamic_widget.dart';
 import 'site_widgets.dart';
@@ -366,7 +366,7 @@ class _LinkedInChannelState extends State<_LinkedInChannel> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit:  (_) => setState(() => _hovered = false),
       child: GestureDetector(
-        onTap: () => launchUrl(linkedInLaunchUri),
+        onTap: () => launchUrl(Sources.linkedInLaunchUri),
         child: _ChannelRow(
           icon: FontAwesomeIcons.linkedin,
           label: 'LINKEDIN',

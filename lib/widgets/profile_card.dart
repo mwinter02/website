@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../sources.dart';
 import '../theme/custom_icons.dart';
 import '../theme/text_theme.dart';
 import 'dynamic_widget.dart';
@@ -94,7 +95,7 @@ class ProfileCard extends DynamicWidget {
       'Full-Stack Development',
     ],
     this.badges = _defaultBadges,
-    this.profileImage = const AssetImage('assets/images/profile_picture.png'),
+    this.profileImage = const AssetImage(AssetSources.picProfile),
   });
 
   static const double _desktopAspectRatio = 16 / 7;
