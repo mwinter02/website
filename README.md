@@ -30,11 +30,12 @@ Currently playing: Pokemon Emerald
 - [ ] Graphics projects? 1230/2240
 
 #### UI
-- Reformat markdown headers, Dev logs title bigger than everything else
-- Skills table on markdown pages
+- Style matching
+- ~~Reformat markdown headers, Dev logs title bigger than everything else~~
+- ~~Skills table on markdown pages~~
 - HTML extend safe area beneath search bar on mobile
 - Fix markdown image pathing on gh pages website, current assets/assets/images
-- Back animation playing twice on mobile when swiping
+- ~~Back animation playing twice on mobile when swiping~~
 - ~~Projects Tab too large on mobile~~
 - ~~Tags scrolling issue on mobile, also on desktop causes accidental reloading~~
 - ~~Back button when clicking on project, also on mobile~~

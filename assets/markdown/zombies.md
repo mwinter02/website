@@ -45,7 +45,7 @@ The final result was a simple "Little Alchemy" game, where the player could comb
 
 > #### Game screenshot
 >
-> ![alc.png](/assets/assets/images/projects/zombies/alc.png)
+> ![alc.png](/assets/assets/images/projects/zombies/alc.jpg)
 ### Project 2: Top-down Shooter
 The second project was to build a top-down shooter game.
 Building upon the first project, we implemented a game world which contained entities and components, allowing for more complex game logic.
@@ -56,7 +56,7 @@ engine systems. We also implemented a decision tree AI system and A-star pathfin
 
 > #### Game screenshot
 > 
-> ![wiz.png](/assets/assets/images/projects/zombies/wiz.png)
+> ![wiz.png](/assets/assets/images/projects/zombies/wiz.jpg)
 
 ### Project 3: Physics-based platformer
 The third project was to build a physics-based platformer game.

@@ -13,7 +13,7 @@ wealth and liveliness — by training on large-scale crowdsourced Street View da
 
 > Base GAN output samples
 > 
-> ![base_gan.png](/assets/assets/images/projects/urbanize/base_gan.png)
+> ![base_gan.jpg](/assets/assets/images/projects/urbanize/base_gan.jpg)
 
 ## Overview
 
@@ -41,7 +41,7 @@ standard adversarial training setup with the PP2 dataset split 80/10/10 across t
 
 > Algorithmic overview of the GAN architecture
 > 
-> ![algo.png](/assets/assets/images/projects/urbanize/algo.png)
+> ![algo.jpg](/assets/assets/images/projects/urbanize/algo.jpg)
 > 
 
 ### Training on OSCAR
@@ -64,9 +64,9 @@ coherent and visually compelling outputs.
 
 > Wealthy Lively GAN results, left to right: low to high wealth. top to bottom: low to high liveliness.
 > 
-> ![wealthy_lively.png](/assets/assets/images/projects/urbanize/wealthy_lively.png)
+> ![wealthy_lively.jpg](/assets/assets/images/projects/urbanize/wealthy_lively.jpg)
 > 
-> ![wealthy_lively_2.png](/assets/assets/images/projects/urbanize/wealthy_lively_2.png)
+> ![wealthy_lively_2.jpg](/assets/assets/images/projects/urbanize/wealthy_lively_2.jpg)
 
 ### Challenges
 
