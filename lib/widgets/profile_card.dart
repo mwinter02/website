@@ -625,7 +625,7 @@ Seeking job opportunities that allow me to apply my skills in a collaborative en
 """;
   static const List<_StatItem> _stats = [
 
-    _StatItem(label: 'Software engineering experience', value: '5+ Years'),
+    _StatItem(label: 'Software engineering\nexperience', value: '5+ Years'),
     _StatItem(label: 'Favorite language', value: 'C++'),
 
   ];
